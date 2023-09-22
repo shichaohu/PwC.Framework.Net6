@@ -1,0 +1,126 @@
+
+2023-09-11 16:26:59.261 [INF] Url:127.0.0.1/
+    RequestId:00000000000000000000000000000000
+    RemoteAddress:127.0.0.1
+    X-Forwarded-For:
+    SourceContext:APV.CRM.Service.Api
+    App Environment:{"EnvironmentName":"Development","ApplicationName":"APV.CRM.Service.Api","WebRootPath":null,"WebRootFileProvider":{},"ContentRootPath":"C:\\project\\company\\apv.crm.services\\APV.CRM.Service.Api\\","ContentRootFileProvider":{"UsePollingFileWatcher":false,"UseActivePolling":false,"Root":"C:\\project\\company\\apv.crm.services\\APV.CRM.Service.Api\\"}}
+    
+2023-09-11 16:27:02.869 [INF] Url:localhost:7108/index.html
+    RequestId:abf9ff03fd5b4799894913567c0e3264
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:Serilog.AspNetCore.RequestLoggingMiddleware
+    HTTP GET /index.html responded 200 in 1207.2213 ms
+    
+2023-09-11 16:27:04.566 [INF] Url:localhost:7108/swagger-resources
+    RequestId:277914446ae343d793236823287ba984
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:Serilog.AspNetCore.RequestLoggingMiddleware
+    HTTP GET /swagger-resources responded 200 in 269.3025 ms
+    
+2023-09-11 16:27:05.300 [INF] Url:localhost:7108/api-docs/All/swagger.json
+    RequestId:73df0809ec2e42cbbabe093bd79bf07c
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:Serilog.AspNetCore.RequestLoggingMiddleware
+    HTTP GET /api-docs/All/swagger.json responded 200 in 512.3714 ms
+    
+2023-09-11 16:27:30.164 [INF] Url:localhost:7108/index.html
+    RequestId:819ba621709947c5a0908df7d81e5895
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:Serilog.AspNetCore.RequestLoggingMiddleware
+    HTTP GET /index.html responded 200 in 11.8617 ms
+    
+2023-09-11 16:27:30.686 [INF] Url:localhost:7108/swagger-resources
+    RequestId:5aa2817ea3554eafa24e251022b06e85
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:Serilog.AspNetCore.RequestLoggingMiddleware
+    HTTP GET /swagger-resources responded 200 in 0.1609 ms
+    
+2023-09-11 16:27:30.728 [INF] Url:localhost:7108/api-docs/All/swagger.json
+    RequestId:364d0856548643839ae590e2f3faf66f
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:Serilog.AspNetCore.RequestLoggingMiddleware
+    HTTP GET /api-docs/All/swagger.json responded 200 in 6.6217 ms
+    
+2023-09-11 16:27:39.856 [INF] Url:localhost:7108/api/LogOperations/QueryDBLogs
+    RequestId:9473ba9f2a87458f9a8b37a3f586095f
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:Serilog.AspNetCore.RequestLoggingMiddleware
+    HTTP POST /api/LogOperations/QueryDBLogs responded 401 in 72.1876 ms
+    
+2023-09-11 16:28:31.499 [INF] Url:127.0.0.1/
+    RequestId:00000000000000000000000000000000
+    RemoteAddress:127.0.0.1
+    X-Forwarded-For:
+    SourceContext:APV.CRM.Service.Api
+    App Environment:{"EnvironmentName":"Development","ApplicationName":"APV.CRM.Service.Api","WebRootPath":null,"WebRootFileProvider":{},"ContentRootPath":"C:\\project\\company\\apv.crm.services\\APV.CRM.Service.Api\\","ContentRootFileProvider":{"UsePollingFileWatcher":false,"UseActivePolling":false,"Root":"C:\\project\\company\\apv.crm.services\\APV.CRM.Service.Api\\"}}
+    
+2023-09-11 16:28:35.350 [INF] Url:localhost:7108/index.html
+    RequestId:ef29e603638c462d87fa19fa5e47e18e
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:Serilog.AspNetCore.RequestLoggingMiddleware
+    HTTP GET /index.html responded 200 in 910.3252 ms
+    
+2023-09-11 16:28:36.417 [INF] Url:localhost:7108/swagger-resources
+    RequestId:d5c453960bb74a7c881c79cbed165ac1
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:Serilog.AspNetCore.RequestLoggingMiddleware
+    HTTP GET /swagger-resources responded 200 in 315.9241 ms
+    
+2023-09-11 16:28:36.815 [INF] Url:localhost:7108/api-docs/All/swagger.json
+    RequestId:387cefbd068543b79d411722c38ce6eb
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:Serilog.AspNetCore.RequestLoggingMiddleware
+    HTTP GET /api-docs/All/swagger.json responded 200 in 387.5671 ms
+    
+2023-09-11 16:28:51.275 [INF] Url:localhost:7108/api/Login/GetToken
+    RequestId:c694fc508cc04e89aa9cab7455b9b772
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:Serilog.AspNetCore.RequestLoggingMiddleware
+    HTTP POST /api/Login/GetToken responded 200 in 1930.8477 ms
+    
+2023-09-11 16:28:51.278 [INF] Url:localhost:7108/api/Login/GetToken
+    RequestId:c694fc508cc04e89aa9cab7455b9b772
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:PwC.Crm.Share.Log.Serilogs.Middlewares.HttpContextLoggingMiddleware
+    Response.Body：{
+    "token_type":"Bearer",
+    "expires_on":"1694507331",
+    "not_before":"1694420931",
+    "resource":"",
+    "access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0ZTEyMjQzMS00MTM0LWIxY2EtZTczMC03MTAyYjZjMTk4MGEiLCJuYW1lIjoiYXB2VXNlciIsIm5iZiI6MTY5NDQyMDkzMSwiZXhwIjoxNjk0NTA3MzMxLCJpc3MiOiJQd2MiLCJhdWQiOiJBUFYuQ1JNLlNlcnZpY2UuQXBpIn0.RKbWmfx6QN-gyYyCPEiEshnBmlCAfhElAhm5jq0DY1Q"
+    }
+    
+2023-09-11 16:33:47.625 [INF] Url:localhost:7108/index.html
+    RequestId:5a2ceeebd0fb4e099e9606785d9e9062
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:Serilog.AspNetCore.RequestLoggingMiddleware
+    HTTP GET /index.html responded 200 in 9.8224 ms
+    
+2023-09-11 16:33:47.936 [INF] Url:localhost:7108/swagger-resources
+    RequestId:1b18432ff76b4103ab56ec2ebffa5770
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:Serilog.AspNetCore.RequestLoggingMiddleware
+    HTTP GET /swagger-resources responded 200 in 0.1611 ms
+    
+2023-09-11 16:33:47.964 [INF] Url:localhost:7108/api-docs/All/swagger.json
+    RequestId:ac41ac2c857b4421ad89031204d30f30
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:Serilog.AspNetCore.RequestLoggingMiddleware
+    HTTP GET /api-docs/All/swagger.json responded 200 in 6.9712 ms
+    

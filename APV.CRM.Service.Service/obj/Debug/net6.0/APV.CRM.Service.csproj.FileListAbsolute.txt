@@ -1,0 +1,17 @@
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\obj\Debug\net6.0\APV.CRM.Service.csproj.AssemblyReference.cache
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\obj\Debug\net6.0\APV.CRM.Service.GeneratedMSBuildEditorConfig.editorconfig
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\obj\Debug\net6.0\APV.CRM.Service.AssemblyInfoInputs.cache
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\obj\Debug\net6.0\APV.CRM.Service.AssemblyInfo.cs
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\obj\Debug\net6.0\APV.CRM.Service.csproj.CoreCompileInputs.cache
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\bin\Debug\net6.0\Dll\PwcNetCore.dll
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\bin\Debug\net6.0\APV.CRM.Service.deps.json
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\bin\Debug\net6.0\APV.CRM.Service.dll
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\bin\Debug\net6.0\APV.CRM.Service.pdb
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\bin\Debug\net6.0\APV.CRM.Service.Share.dll
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\bin\Debug\net6.0\PwcNetCore.dll
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\bin\Debug\net6.0\APV.CRM.Service.Share.pdb
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\obj\Debug\net6.0\APV.CRM.Service.csproj.CopyComplete
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\obj\Debug\net6.0\APV.CRM.Service.dll
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\obj\Debug\net6.0\refint\APV.CRM.Service.dll
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\obj\Debug\net6.0\APV.CRM.Service.pdb
+C:\project\company\APV\apv.crm.services\APV.CRM.Service.Core\obj\Debug\net6.0\ref\APV.CRM.Service.dll

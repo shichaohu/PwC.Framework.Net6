@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>APV.CRM.Service.Api</name>
+    </assembly>
+    <members>
+        <member name="M:APV.CRM.Service.Api.Controllers.BaseController`1.#ctor(Microsoft.Extensions.Logging.ILogger{`0})">
+            <summary>
+            此处用来兼容Azure上偶发性丢失日志的问题
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="T:APV.CRM.Service.Api.Controllers.CommonController">
+            <summary>
+            公共接口
+            </summary>
+        </member>
+        <member name="M:APV.CRM.Service.Api.Controllers.CommonController.GetAllApiInfo">
+            <summary>
+            查询系统所有接口信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:APV.CRM.Service.Api.Controllers.LoginController">
+            <summary>
+            Login
+            </summary>
+        </member>
+        <member name="M:APV.CRM.Service.Api.Controllers.LoginController.GetToken(APV.CRM.Service.Service.Dto.Request.LoginRequestDto)">
+            <summary>
+            获取token
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:APV.CRM.Service.Api.Controllers.LoginController.ClearLoginUserToken">
+            <summary>
+            清空登录用户Token
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:APV.CRM.Service.Api.Controllers.LogOperationsController">
+            <summary>
+            日志
+            </summary>
+        </member>
+        <member name="M:APV.CRM.Service.Api.Controllers.LogOperationsController.QueryFileLogs(APV.CRM.Service.Api.Controllers.SearchLogsModel)">
+            <summary>
+            查询文件日志
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:APV.CRM.Service.Api.Controllers.LogOperationsController.QueryDBLogs(APV.CRM.Service.Service.Dto.Request.LogRequestDto)">
+            <summary>
+            查询数据库日志
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:APV.CRM.Service.Api.Controllers.XxxDemoController">
+            <summary>
+            XxxDemo
+            </summary>
+        </member>
+        <member name="M:APV.CRM.Service.Api.Controllers.XxxDemoController.GetXxxs(APV.CRM.Service.Service.Dto.Request.XxxRequestDto)">
+            <summary>
+            获取Xxx
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:APV.CRM.Service.Api.HttpClients.HttpClientExtensions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:APV.CRM.Service.Api.HttpClients.HttpClientExtensions.AddCustomerHttpClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            注册ECMHttpClient
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="T:APV.CRM.Service.Api.HttpClients.HttpClientHandlers.SRDMHttpClient">
+            <summary>
+            SRDM的HttpClient
+            </summary>
+        </member>
+        <member name="M:APV.CRM.Service.Api.HttpClients.HttpClientHandlers.SRDMHttpClient.SendAsync(System.String,System.Object)">
+            <summary>
+            给SRDM发送Http请求
+            </summary>
+            <param name="url">请求地址</param>
+            <param name="parameters">请求参数</param>
+            <returns></returns>
+        </member>
+        <member name="T:APV.CRM.Service.Api.Swagger.SwaggerExtensions">
+            <summary>
+            SwaggerUI集成扩展
+            </summary>
+        </member>
+        <member name="M:APV.CRM.Service.Api.Swagger.SwaggerExtensions.AddSwaggerDoc(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Register the SwaggerDoc Service
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:APV.CRM.Service.Api.Swagger.SwaggerExtensions.UseSwaggerUi(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            Register the SwaggerUI middleware
+            </summary>
+            <param name="app"></param>
+            <param name="configuration"></param>
+            <param name="env"></param>
+        </member>
+        <member name="T:APV.CRM.Service.Api.Swagger.SwaggerModel.ApiGroupAttribute">
+            <summary>
+            系统分组特性
+            </summary>
+        </member>
+        <member name="T:APV.CRM.Service.Api.Swagger.SwaggerModel.ApiGroupNames">
+            <summary>
+            系统分组枚举值
+            </summary>
+        </member>
+        <member name="F:APV.CRM.Service.Api.Swagger.SwaggerModel.ApiGroupNames.All">
+            <summary>
+            All 所有
+            </summary>
+        </member>
+        <member name="F:APV.CRM.Service.Api.Swagger.SwaggerModel.ApiGroupNames.NoGroup">
+            <summary>
+            NoGroup 未分组
+            </summary>
+        </member>
+        <member name="F:APV.CRM.Service.Api.Swagger.SwaggerModel.ApiGroupNames.Developing">
+            <summary>
+            Developing 开发中
+            </summary>
+        </member>
+        <member name="F:APV.CRM.Service.Api.Swagger.SwaggerModel.ApiGroupNames.Common">
+            <summary>
+            公共接口
+            </summary>
+        </member>
+        <member name="T:APV.CRM.Service.Api.Swagger.SwaggerModel.GroupInfoAttribute">
+            <summary>
+            分组的描述信息
+            </summary>
+        </member>
+        <member name="P:APV.CRM.Service.Api.Swagger.SwaggerModel.GroupInfoAttribute.Title">
+            <summary>
+            
+            </summary>
+        </member>
+    </members>
+</doc>

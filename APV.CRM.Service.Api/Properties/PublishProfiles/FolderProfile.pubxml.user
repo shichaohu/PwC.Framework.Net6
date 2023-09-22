@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\ApvAllPublish\APV.CRM.Service.Api</_PublishTargetUrl>
+    <History>True|2023-09-07T15:42:50.2741290Z;True|2023-09-07T16:03:01.6123910+08:00;True|2023-09-07T16:01:16.2436751+08:00;True|2023-09-07T15:54:50.8787568+08:00;True|2023-09-07T15:13:22.6122833+08:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

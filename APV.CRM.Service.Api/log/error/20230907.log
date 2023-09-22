@@ -1,0 +1,18 @@
+
+2023-09-07 13:56:20.387 [ERR] Url:localhost:7108/api/Login/GetToken
+    RequestId:939b857776154250b9232a2cd1369a06
+    RemoteAddress:::1
+    X-Forwarded-For:
+    SourceContext:APV.CRM.Service.Api.Common.GlobalExceptionHandler
+    Exception：Object reference not set to an instance of an object.:   at APV.CRM.Service.Service.Core.Implement.LoginService.LoadAllApiUsersToCache() in C:\project\company\APV\apv.crm.services\APV.CRM.Service.Service\Core\Implement\LoginService.cs:line 117
+   at APV.CRM.Service.Service.Core.Implement.LoginService.Login(LoginRequestDto request) in C:\project\company\APV\apv.crm.services\APV.CRM.Service.Service\Core\Implement\LoginService.cs:line 45
+   at APV.CRM.Service.Api.Controllers.LoginController.GetToken(LoginRequestDto request) in C:\project\company\APV\apv.crm.services\APV.CRM.Service.Api\Controllers\LoginController.cs:line 37
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|26_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)，InnerException：
+    

@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "UHgFTk5HTEtntKPJzprkoT9LVtfcTif3VdSuCMgeViU=",
+  "Source": "APV.CRM.Service.Api",
+  "BasePath": "_content/APV.CRM.Service.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

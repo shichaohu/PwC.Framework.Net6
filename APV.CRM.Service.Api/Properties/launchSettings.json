@@ -1,0 +1,70 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:11621",
+      "sslPort": 44330
+    }
+  },
+  "profiles": {
+    "SMoore.APV.Service.Api.Dev": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      //"launchUrl": "swagger",
+      "launchUrl": "",
+      //"applicationUrl": "https://localhost:7108;http://localhost:5285",
+      "applicationUrl": "http://localhost:7108",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "SMoore.APV.Service.Api.Sit": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      //"launchUrl": "swagger",
+      "launchUrl": "",
+      //"applicationUrl": "https://localhost:7108;http://localhost:5285",
+      "applicationUrl": "http://localhost:7108",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "SIT"
+      }
+    },
+    "SMoore.APV.Service.Api.Uat": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      //"launchUrl": "swagger",
+      "launchUrl": "",
+      //"applicationUrl": "https://localhost:7108;http://localhost:5285",
+      "applicationUrl": "http://localhost:7108",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "UAT"
+      }
+    },
+    "SMoore.APV.Service.Api.Pro": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      //"launchUrl": "swagger",
+      "launchUrl": "",
+      //"applicationUrl": "https://localhost:7108;http://localhost:5285",
+      "applicationUrl": "http://localhost:7108",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "PRD"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      //"launchUrl": "swagger",
+      "launchUrl": "",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

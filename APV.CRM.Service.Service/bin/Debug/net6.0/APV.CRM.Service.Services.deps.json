@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "APV.CRM.Service.Services/1.0.0": {
+        "runtime": {
+          "APV.CRM.Service.Services.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "APV.CRM.Service.Services/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

@@ -1,0 +1,15 @@
+C:\project\company\apv.crm.services\PwC.CrmModels\obj\Debug\net6.0\PwC.CrmModels.csproj.AssemblyReference.cache
+C:\project\company\apv.crm.services\PwC.CrmModels\obj\Debug\net6.0\PwC.CrmModels.GeneratedMSBuildEditorConfig.editorconfig
+C:\project\company\apv.crm.services\PwC.CrmModels\obj\Debug\net6.0\PwC.CrmModels.AssemblyInfoInputs.cache
+C:\project\company\apv.crm.services\PwC.CrmModels\obj\Debug\net6.0\PwC.CrmModels.AssemblyInfo.cs
+C:\project\company\apv.crm.services\PwC.CrmModels\obj\Debug\net6.0\PwC.CrmModels.csproj.CoreCompileInputs.cache
+C:\project\company\apv.crm.services\PwC.CrmModels\bin\Debug\net6.0\Dll\PwcNetCore.dll
+C:\project\company\apv.crm.services\PwC.CrmModels\bin\Debug\net6.0\PwC.CrmModels.deps.json
+C:\project\company\apv.crm.services\PwC.CrmModels\bin\Debug\net6.0\PwC.CrmModels.dll
+C:\project\company\apv.crm.services\PwC.CrmModels\bin\Debug\net6.0\PwC.CrmModels.pdb
+C:\project\company\apv.crm.services\PwC.CrmModels\bin\Debug\net6.0\PwcNetCore.dll
+C:\project\company\apv.crm.services\PwC.CrmModels\obj\Debug\net6.0\PwC.CrmModels.csproj.CopyComplete
+C:\project\company\apv.crm.services\PwC.CrmModels\obj\Debug\net6.0\PwC.CrmModels.dll
+C:\project\company\apv.crm.services\PwC.CrmModels\obj\Debug\net6.0\refint\PwC.CrmModels.dll
+C:\project\company\apv.crm.services\PwC.CrmModels\obj\Debug\net6.0\PwC.CrmModels.pdb
+C:\project\company\apv.crm.services\PwC.CrmModels\obj\Debug\net6.0\ref\PwC.CrmModels.dll
