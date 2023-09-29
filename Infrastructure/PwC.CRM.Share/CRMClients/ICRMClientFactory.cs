@@ -1,4 +1,4 @@
-﻿using PwC.Crm.Share.PwcNetCore;
+﻿using PwC.Crm.Share.CRMClients.OData;
 using PwcNetCore;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace PwC.Crm.Share.CRMClients
     {
 
         ICrequest GetCrequest(CRMClientTypeEnum clientType);
-        ICRMClient GetCRMClient(CRMClientTypeEnum clientType);
+        IODataHttpClient GetODataHttpClient(CRMClientTypeEnum clientType);
         /// <summary>
         /// 获取DataBaseConnectString
         /// </summary>

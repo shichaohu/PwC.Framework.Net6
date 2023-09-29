@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace PwC.Crm.Share.PwcNetCore.Models
+namespace PwC.Crm.Share.CRMClients.OData.Models
 {
     internal class EntityReferenceConverter : JsonConverter
     {

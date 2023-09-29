@@ -1,12 +1,8 @@
-using PwC.Crm.Share.CRMClients;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Org.BouncyCastle.Asn1.Ocsp;
+using PwC.Crm.Share.CRMClients;
+using PwC.Crm.Share.CRMClients.OData;
 using PwcNetCore;
-using System.Configuration;
-using PwC.Crm.Share.PwcNetCore;
 
 namespace PwC.Crm.Share.Extensions;
 
@@ -28,7 +24,7 @@ public static class CrmClientExtensions
             }
 
             clientFactory.AddCrequest(clientType, RegistRequest(configuration, clientType));
-            clientFactory.AddCRMClient(clientType, RegistCRMClient(configuration, clientType));
+            clientFactory.AddODataHttpClient(clientType, RegistODataHttpClient(configuration, clientType));
         }
 
         services.AddSingleton<ICRMClientFactory>(clientFactory);
@@ -49,7 +45,7 @@ public static class CrmClientExtensions
                 configuration.GetSection($"{configPrefix}:tokenUrl").Value
                 );
     }
-    private static ICRMClient RegistCRMClient(IConfiguration configuration, CRMClientTypeEnum clientType)
+    private static IODataHttpClient RegistODataHttpClient(IConfiguration configuration, CRMClientTypeEnum clientType)
     {
         string configPrefix = $"CRM:{clientType}";
 
@@ -58,7 +54,7 @@ public static class CrmClientExtensions
         {
             resourceUrl += "/";
         }
-        return new CRMClient(resourceUrl,
+        return new ODataHttpClient(resourceUrl,
                 configuration.GetSection($"{configPrefix}:clientId").Value,
                 configuration.GetSection($"{configPrefix}:clientSecret").Value,
                 configuration.GetSection($"{configPrefix}:tenantId").Value,

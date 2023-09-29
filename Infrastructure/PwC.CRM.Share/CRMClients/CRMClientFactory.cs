@@ -1,4 +1,4 @@
-﻿using PwC.Crm.Share.PwcNetCore;
+﻿using PwC.Crm.Share.CRMClients.OData;
 using PwcNetCore;
 
 namespace PwC.Crm.Share.CRMClients
@@ -9,12 +9,12 @@ namespace PwC.Crm.Share.CRMClients
     public class CRMClientFactory : ICRMClientFactory
     {
         private Dictionary<CRMClientTypeEnum, ICrequest> _crequestDic;
-        private Dictionary<CRMClientTypeEnum, ICRMClient> _crmClientDic;
+        private Dictionary<CRMClientTypeEnum, IODataHttpClient> _oDataHttpClientDic;
         private Dictionary<CRMClientTypeEnum, string> _crmConnectionStringDic;
         public CRMClientFactory()
         {
             _crequestDic = new Dictionary<CRMClientTypeEnum, ICrequest> { };
-            _crmClientDic = new Dictionary<CRMClientTypeEnum, ICRMClient> { };
+            _oDataHttpClientDic = new Dictionary<CRMClientTypeEnum, IODataHttpClient> { };
             _crmConnectionStringDic = new Dictionary<CRMClientTypeEnum, string> { };
 
         }
@@ -37,22 +37,22 @@ namespace PwC.Crm.Share.CRMClients
                 return _crequestDic[CRMClientTypeEnum.Default];
             }
         }
-        public void AddCRMClient(CRMClientTypeEnum clientType, ICRMClient client)
+        public void AddODataHttpClient(CRMClientTypeEnum clientType, IODataHttpClient client)
         {
-            if (!_crmClientDic.ContainsKey(clientType))
+            if (!_oDataHttpClientDic.ContainsKey(clientType))
             {
-                _crmClientDic.Add(clientType, client);
+                _oDataHttpClientDic.Add(clientType, client);
             }
         }
-        public ICRMClient GetCRMClient(CRMClientTypeEnum clientType)
+        public IODataHttpClient GetODataHttpClient(CRMClientTypeEnum clientType)
         {
-            if (_crmClientDic.ContainsKey(clientType))
+            if (_oDataHttpClientDic.ContainsKey(clientType))
             {
-                return _crmClientDic[clientType];
+                return _oDataHttpClientDic[clientType];
             }
             else
             {
-                return _crmClientDic[CRMClientTypeEnum.Default];
+                return _oDataHttpClientDic[CRMClientTypeEnum.Default];
             }
         }
         public void AddCRMConnectionString(CRMClientTypeEnum clientType, string crmConnectionString)

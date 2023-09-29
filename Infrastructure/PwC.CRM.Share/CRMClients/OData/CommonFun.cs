@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.PwcNetCore
+namespace PwC.Crm.Share.CRMClients.OData
 {
     internal class CommonFun
     {

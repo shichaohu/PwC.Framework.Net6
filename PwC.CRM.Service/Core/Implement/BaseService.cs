@@ -1,10 +1,10 @@
-﻿using PwC.CRM.Service.Enums;
-using PwC.Crm.Share.CRMClients;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using PwC.Crm.Share.CRMClients;
+using PwC.Crm.Share.CRMClients.Dataverse;
+using PwC.Crm.Share.CRMClients.OData;
+using PwC.CRM.Service.Enums;
 using PwcNetCore;
-using PwC.CRM.Share.PPDataverseClient;
-using PwC.Crm.Share.PwcNetCore;
 
 namespace PwC.CRM.Service.Core.Implement
 {
@@ -12,7 +12,7 @@ namespace PwC.CRM.Service.Core.Implement
     {
         protected readonly IConfiguration _configuration;
         protected readonly ICrequest _cRequest;
-        protected readonly ICRMClient _crmClient;
+        protected readonly IODataHttpClient _oDataHttpClient;
         protected readonly ICRMClientFactory _crmClientFactory;
         protected readonly string _crmConnectionString;
         protected ServiceClient ServiceClient
@@ -43,13 +43,13 @@ namespace PwC.CRM.Service.Core.Implement
                 {
                     _crmConnectionString = _crmClientFactory.GetConnectString(crmClientTypeEnum);
                     _cRequest = _crmClientFactory.GetCrequest(crmClientTypeEnum);
-                    _crmClient = _crmClientFactory.GetCRMClient(crmClientTypeEnum);
+                    _oDataHttpClient = _crmClientFactory.GetODataHttpClient(crmClientTypeEnum);
                 }
             }
 
             _crmConnectionString ??= _crmClientFactory.GetConnectString(CRMClientTypeEnum.Default);
             _cRequest ??= _crmClientFactory.GetCrequest(CRMClientTypeEnum.Default);
-            _crmClient ??= _crmClientFactory.GetCRMClient(CRMClientTypeEnum.Default);
+            _oDataHttpClient ??= _crmClientFactory.GetODataHttpClient(CRMClientTypeEnum.Default);
 
 
         }

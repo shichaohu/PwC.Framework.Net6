@@ -4,7 +4,7 @@ using PwC.Crm.Share.CommonCode;
 
 namespace PwC.CRM.Service.Core
 {
-    public interface IXxxDemoService : IBaseService, IDependency
+    public interface IDemoService : IBaseService, IDependency
     {
         Task<List<Systemuser>> GetBusinessunit(XxxRequestDto parameter);
     }

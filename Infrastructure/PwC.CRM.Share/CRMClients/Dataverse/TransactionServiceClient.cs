@@ -2,11 +2,11 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
-using PwC.Crm.Share.PwcNetCore.Models;
+using PwC.Crm.Share.CRMClients.OData.Models;
 using System.Reflection;
 using System.ServiceModel;
 
-namespace PwC.CRM.Share.PPDataverseClient
+namespace PwC.Crm.Share.CRMClients.Dataverse
 {
     public class TransactionServiceClient : ServiceClient
     {
@@ -32,7 +32,8 @@ namespace PwC.CRM.Share.PPDataverseClient
             _executeTransactionRequest = new ExecuteTransactionRequest()
             {
                 Requests = new OrganizationRequestCollection(),
-                ReturnResponses = true
+                ReturnResponses = true,
+                RequestName = ""
             };
         }
         /// <summary>

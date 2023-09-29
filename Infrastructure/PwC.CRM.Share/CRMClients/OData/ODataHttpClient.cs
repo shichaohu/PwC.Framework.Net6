@@ -1,25 +1,28 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using PwC.Crm.Share.PwcNetCore.Models;
+using PwC.Crm.Share.CRMClients.OData.Models;
+using PwC.Crm.Share.Util;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Web;
 
-namespace PwC.Crm.Share.PwcNetCore
+namespace PwC.Crm.Share.CRMClients.OData
 {
     /// <summary>
     ///  CRM Client
     /// </summary>
-    public class CRMClient : ICRMClient, IDisposable
+    public class ODataHttpClient : IODataHttpClient, IDisposable
     {
         private struct Token
         {
             public AuthenticationResponse authentication;
 
-            public DateTime getTime;
+            public DateTime expires_on;
+
+            public DateTime not_before;
 
             public string errorDescription;
         }
@@ -58,7 +61,7 @@ namespace PwC.Crm.Share.PwcNetCore
 
         private Token _tokenCaChe;
 
-        public CRMClient(string resourceUrl, string clientId, string clientSecret, string tenantId, string tokenUrl, string MSCRMCallerID = "")
+        public ODataHttpClient(string resourceUrl, string clientId, string clientSecret, string tenantId, string tokenUrl, string MSCRMCallerID = "")
         {
             init(resourceUrl, clientId, clientSecret, tenantId, tokenUrl, MSCRMCallerID);
         }
@@ -150,26 +153,6 @@ namespace PwC.Crm.Share.PwcNetCore
         }
 
 
-        #endregion
-        #region private
-
-        private string GetEntityName<T>()
-        {
-            Type type = typeof(T);
-            MethodInfo method = type.GetMethod("GetEntityKey");
-            string entityName;
-            if (method != null)
-            {
-                object obj = method.Invoke(null, null);
-                entityName = obj.ToString();
-            }
-            else
-            {
-                entityName = type.Name.ToLower();
-            }
-
-            return entityName;
-        }
         #endregion
 
         #region Query
@@ -698,7 +681,64 @@ namespace PwC.Crm.Share.PwcNetCore
             }
         }
         #endregion
-        #region ExecuteBatch
+
+        #region Execute
+        public async Task<CrmResponse<T>> Execute<T>(string operationName, object boundParameter, CrmParameter crmParameter = null)
+        {
+            CrmResponse<T> crmRet = new CrmResponse<T>
+            {
+                Data = new List<T>()
+            };
+            try
+            {
+                await PostData(operationName, boundParameter, crmParameter, async delegate (HttpResponseMessage response)
+                {
+                    string text = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Type typeFromHandle = typeof(T);
+                        if (!string.IsNullOrWhiteSpace(text))
+                        {
+                            if (typeFromHandle == typeof(string))
+                            {
+                                crmRet.Data.Add((T)(object)text);
+                            }
+                            else if (typeFromHandle == typeof(int))
+                            {
+                                crmRet.Data.Add((T)(object)Convert.ToInt32(text));
+                            }
+                            else
+                            {
+                                crmRet.Data.Add(JsonConvert.DeserializeObject<T>(text));
+                            }
+                        }
+
+                        crmRet.Code = ResultCode.Success;
+                    }
+                    else if (string.IsNullOrEmpty(text))
+                    {
+                        crmRet.Code = ResultCode.OtherError;
+                        crmRet.Message = response.ReasonPhrase;
+                    }
+                    else
+                    {
+                        object obj = ((dynamic)JsonConvert.DeserializeObject<object>(text)).error;
+                        crmRet.Code = ResultCode.OtherError;
+                        crmRet.Message = ((dynamic)obj)?.Message?.Value;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                crmRet.Code = ResultCode.OtherError;
+                crmRet.Message = ex.Message;
+                crmRet.StackTrace = ex.StackTrace;
+                crmRet.Location = "Plug-in";
+            }
+
+            return crmRet;
+        }
+
         public async Task<CrmResponse<string>> ExecuteBatch(List<BatchContainer> data, CrmParameter crmParameter = null)
         {
             return await ExecuteBatchFun(data, crmParameter);
@@ -819,6 +859,121 @@ namespace PwC.Crm.Share.PwcNetCore
 
         #endregion
 
+        #region other
+        public async Task<CrmResponse> Associate(string entityName, Guid entityId, string relationship, EntityReference entityReferences, CrmParameter crmParameter = null)
+        {
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+            CrmResponse crmResponse = new();
+
+            dictionary.Add("@odata.id", _resourceUrl + "api/data/v9.2/" + CommonFun.GetPluralForm(entityReferences.logicalName) + "(" + entityReferences.Id.ToString() + ")");
+
+            string requestUrl = $"{CommonFun.GetPluralForm(entityName)}({entityId})/{relationship}/$ref";
+            await PostData(requestUrl, dictionary, crmParameter, delegate (HttpResponseMessage r)
+            {
+                if (r.IsSuccessStatusCode)
+                {
+                    crmResponse.Code = ResultCode.Success;
+                    crmResponse.Message = r.ReasonPhrase;
+                }
+                else
+                {
+                    crmResponse.Code = ResultCode.OtherError;
+                    crmResponse.Message = r.ReasonPhrase;
+                    crmResponse.Location = "Plug-in";
+                }
+            });
+            return crmResponse;
+        }
+
+        public async Task<CrmResponse> Disassociate(string entityName, Guid entityId, string relationship, EntityReference entityReferences, CrmParameter crmParameter = null)
+        {
+            new Dictionary<string, string>();
+            CrmResponse crmResponse = new CrmResponse();
+            Token token = await GetAuthenticationResponse();
+
+            string requestUrl = $"api/data/v9.2/{CommonFun.GetPluralForm(entityName)}({entityId}/{relationship}({entityReferences.Id}/)/$ref";
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, requestUrl);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.authentication.access_token);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.Add("If-Match", "*");
+            SetCrmParameter(crmParameter, request);
+            HttpResponseMessage httpResponseMessage = await _crmDataPost.SendAsync(request);
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                crmResponse.Code = ResultCode.Success;
+                crmResponse.Message = httpResponseMessage.ReasonPhrase;
+            }
+            else
+            {
+                crmResponse.Code = ResultCode.OtherError;
+                crmResponse.Message = httpResponseMessage.ReasonPhrase;
+                crmResponse.Location = "Plug-in";
+            }
+
+            request.Dispose();
+            return crmResponse;
+        }
+
+        public async Task<CrmResponse> ClearField<T>(string entityName, Guid? Id, List<string> field)
+        {
+            Token authResult = await GetAuthenticationResponse();
+            CrmResponse ret = new CrmResponse
+            {
+                Code = ResultCode.Success,
+                Message = "ok"
+            };
+            for (int i = 0; i < field.Count; i++)
+            {
+                string requestUrl = $"api/data/v9.2/{CommonFun.GetPluralForm(entityName)}({Id})/{field[i]}";
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, requestUrl);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authResult.authentication.access_token);
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                request.Headers.Add("If-Match", "*");
+                HttpResponseMessage response = await _crmDataPost.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    string value = await (response.Content?.ReadAsStringAsync());
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        ret.Code = ResultCode.OtherError;
+                        ret.Message = response.ReasonPhrase;
+                    }
+                    else
+                    {
+                        object obj2 = ((dynamic)JsonConvert.DeserializeObject<object>(value)).error;
+                        ret.Code = ResultCode.OtherError;
+                        ret.Message = ((dynamic)obj2)?.Message?.Value;
+                    }
+
+                    return ret;
+                }
+
+                response.Dispose();
+                request.Dispose();
+            }
+
+            return ret;
+        }
+        #endregion
+
+        #region private
+        private string GetEntityName<T>()
+        {
+            Type type = typeof(T);
+            MethodInfo method = type.GetMethod("GetEntityKey");
+            string entityName;
+            if (method != null)
+            {
+                object obj = method.Invoke(null, null);
+                entityName = obj.ToString();
+            }
+            else
+            {
+                entityName = type.Name.ToLower();
+            }
+
+            return entityName;
+        }
         private string GetObjectToString<T>(string entityName, T entity, bool isBatch)
         {
             List<PropertyInfo> list = (from w in (isBatch ? entity.GetType() : typeof(T)).GetProperties(BindingFlags.Instance | BindingFlags.Public)
@@ -902,7 +1057,7 @@ namespace PwC.Crm.Share.PwcNetCore
 
         private async Task<Token> GetAuthenticationResponse()
         {
-            if (_tokenCaChe.authentication != null && DateTime.Now.Subtract(_tokenCaChe.getTime).TotalMinutes < 30d)
+            if (_tokenCaChe.authentication != null && _tokenCaChe.not_before.Subtract(DateTime.Now).TotalMinutes > 10d)
             {
                 return _tokenCaChe;
             }
@@ -947,7 +1102,9 @@ namespace PwC.Crm.Share.PwcNetCore
                 {
                     AuthenticationResponse authentication = JsonConvert.DeserializeObject<AuthenticationResponse>(await httpResponseMessage.Content.ReadAsStringAsync());
                     _tokenCaChe.authentication = authentication;
-                    _tokenCaChe.getTime = DateTime.Now;
+                    _tokenCaChe.expires_on = DateTimeHelper.TimestampToDateTime(authentication.expires_on);
+                    _tokenCaChe.not_before = DateTimeHelper.TimestampToDateTime(authentication.not_before);
+
                 }
                 else
                 {
@@ -1091,157 +1248,8 @@ namespace PwC.Crm.Share.PwcNetCore
             ret.Data = new List<string> { item };
             return ret;
         }
+        #endregion
 
-        public async Task<CrmResponse> Associate(string entityName, Guid entityId, string relationship, EntityReference entityReferences, CrmParameter crmParameter = null)
-        {
-            Dictionary<string, string> dictionary = new Dictionary<string, string>();
-            CrmResponse crmResponse = new();
-
-            dictionary.Add("@odata.id", _resourceUrl + "api/data/v9.2/" + CommonFun.GetPluralForm(entityReferences.logicalName) + "(" + entityReferences.Id.ToString() + ")");
-
-            string requestUrl = $"{CommonFun.GetPluralForm(entityName)}({entityId})/{relationship}/$ref";
-            await PostData(requestUrl, dictionary, crmParameter, delegate (HttpResponseMessage r)
-            {
-                if (r.IsSuccessStatusCode)
-                {
-                    crmResponse.Code = ResultCode.Success;
-                    crmResponse.Message = r.ReasonPhrase;
-                }
-                else
-                {
-                    crmResponse.Code = ResultCode.OtherError;
-                    crmResponse.Message = r.ReasonPhrase;
-                    crmResponse.Location = "Plug-in";
-                }
-            });
-            return crmResponse;
-        }
-
-        public async Task<CrmResponse> Disassociate(string entityName, Guid entityId, string relationship, EntityReference entityReferences, CrmParameter crmParameter = null)
-        {
-            new Dictionary<string, string>();
-            CrmResponse crmResponse = new CrmResponse();
-            Token token = await GetAuthenticationResponse();
-
-            string requestUrl = $"api/data/v9.2/{CommonFun.GetPluralForm(entityName)}({entityId}/{relationship}({entityReferences.Id}/)/$ref";
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, requestUrl);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.authentication.access_token);
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Add("If-Match", "*");
-            SetCrmParameter(crmParameter, request);
-            HttpResponseMessage httpResponseMessage = await _crmDataPost.SendAsync(request);
-            if (httpResponseMessage.IsSuccessStatusCode)
-            {
-                crmResponse.Code = ResultCode.Success;
-                crmResponse.Message = httpResponseMessage.ReasonPhrase;
-            }
-            else
-            {
-                crmResponse.Code = ResultCode.OtherError;
-                crmResponse.Message = httpResponseMessage.ReasonPhrase;
-                crmResponse.Location = "Plug-in";
-            }
-
-            request.Dispose();
-            return crmResponse;
-        }
-
-        public async Task<CrmResponse<T>> Execute<T>(string operationName, object boundParameter, CrmParameter crmParameter = null)
-        {
-            CrmResponse<T> crmRet = new CrmResponse<T>
-            {
-                Data = new List<T>()
-            };
-            try
-            {
-                await PostData(operationName, boundParameter, crmParameter, async delegate (HttpResponseMessage response)
-                {
-                    string text = await response.Content.ReadAsStringAsync();
-                    if (response.IsSuccessStatusCode)
-                    {
-                        Type typeFromHandle = typeof(T);
-                        if (!string.IsNullOrWhiteSpace(text))
-                        {
-                            if (typeFromHandle == typeof(string))
-                            {
-                                crmRet.Data.Add((T)(object)text);
-                            }
-                            else if (typeFromHandle == typeof(int))
-                            {
-                                crmRet.Data.Add((T)(object)Convert.ToInt32(text));
-                            }
-                            else
-                            {
-                                crmRet.Data.Add(JsonConvert.DeserializeObject<T>(text));
-                            }
-                        }
-
-                        crmRet.Code = ResultCode.Success;
-                    }
-                    else if (string.IsNullOrEmpty(text))
-                    {
-                        crmRet.Code = ResultCode.OtherError;
-                        crmRet.Message = response.ReasonPhrase;
-                    }
-                    else
-                    {
-                        object obj = ((dynamic)JsonConvert.DeserializeObject<object>(text)).error;
-                        crmRet.Code = ResultCode.OtherError;
-                        crmRet.Message = ((dynamic)obj)?.Message?.Value;
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                crmRet.Code = ResultCode.OtherError;
-                crmRet.Message = ex.Message;
-                crmRet.StackTrace = ex.StackTrace;
-                crmRet.Location = "Plug-in";
-            }
-
-            return crmRet;
-        }
-
-        public async Task<CrmResponse> ClearField<T>(string entityName, Guid? Id, List<string> field)
-        {
-            Token authResult = await GetAuthenticationResponse();
-            CrmResponse ret = new CrmResponse
-            {
-                Code = ResultCode.Success,
-                Message = "ok"
-            };
-            for (int i = 0; i < field.Count; i++)
-            {
-                string requestUrl = $"api/data/v9.2/{CommonFun.GetPluralForm(entityName)}({Id})/{field[i]}";
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, requestUrl);
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authResult.authentication.access_token);
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                request.Headers.Add("If-Match", "*");
-                HttpResponseMessage response = await _crmDataPost.SendAsync(request);
-                if (!response.IsSuccessStatusCode)
-                {
-                    string value = await (response.Content?.ReadAsStringAsync());
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        ret.Code = ResultCode.OtherError;
-                        ret.Message = response.ReasonPhrase;
-                    }
-                    else
-                    {
-                        object obj2 = ((dynamic)JsonConvert.DeserializeObject<object>(value)).error;
-                        ret.Code = ResultCode.OtherError;
-                        ret.Message = ((dynamic)obj2)?.Message?.Value;
-                    }
-
-                    return ret;
-                }
-
-                response.Dispose();
-                request.Dispose();
-            }
-
-            return ret;
-        }
 
         public void Dispose()
         {
@@ -1251,7 +1259,7 @@ namespace PwC.Crm.Share.PwcNetCore
 
         public override bool Equals(object? obj)
         {
-            return obj is CRMClient client &&
+            return obj is ODataHttpClient client &&
                    EqualityComparer<HttpClient>.Default.Equals(_tokenHttpClient, client._tokenHttpClient);
         }
 

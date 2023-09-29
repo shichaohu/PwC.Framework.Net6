@@ -9,6 +9,7 @@ namespace PwC.Crm.Share.CRMClients
     public enum CRMClientTypeEnum
     {
         Default,
-        HK = 1
+        HK,
+        US
     }
 }

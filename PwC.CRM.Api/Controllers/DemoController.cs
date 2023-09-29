@@ -13,13 +13,13 @@ namespace PwC.CRM.Api.Controllers
     [Route("api/[controller]/[action]")]
     [ApiGroup(ApiGroupNames.Common)]
     [SerilogIgnore]
-    public class XxxDemoController : BaseController<XxxDemoController>
+    public class DemoController : BaseController<DemoController>
     {
-        private readonly ILogger<XxxDemoController> _logger;
-        private readonly IXxxDemoService _xxxService;
+        private readonly ILogger<DemoController> _logger;
+        private readonly IDemoService _xxxService;
 
-        public XxxDemoController(ILogger<XxxDemoController> logger,
-            IXxxDemoService xxxService) : base(logger)
+        public DemoController(ILogger<DemoController> logger,
+            IDemoService xxxService) : base(logger)
         {
             _logger = logger;
             _xxxService = xxxService;

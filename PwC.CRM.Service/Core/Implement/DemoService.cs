@@ -1,12 +1,11 @@
-﻿using PwC.CRM.Service.Dto.Request;
-using PwC.Crm.Share.PwcNetCore;
-using CrmModels;
+﻿using CrmModels;
+using PwC.CRM.Service.Dto.Request;
 
 namespace PwC.CRM.Service.Core.Implement
 {
-    public class XxxDemoService : BaseService, IXxxDemoService
+    public class DemoService : BaseService, IDemoService
     {
-        public XxxDemoService(ICommonInjectionObject commonInjectionObject) : base(commonInjectionObject)
+        public DemoService(ICommonInjectionObject commonInjectionObject) : base(commonInjectionObject)
         {
         }
         public async Task<List<Systemuser>> GetBusinessunit(XxxRequestDto parameter)
@@ -22,8 +21,19 @@ namespace PwC.CRM.Service.Core.Implement
                     </filter>
                   </entity>
                 </fetch>";
-            var res1 = await _crmClient.QueryRecords<Systemuser>(fetchXml);
-            var res11 = await _cRequest.QueryRecords<Systemuser>("systemuser", fetchXml);
+            var res1 = await _oDataHttpClient.QueryRecords<Systemuser>(fetchXml);
+            var user = res1.Data[0];
+            user.address1_name = "xx1";
+
+            using (var tranSvcClient = TransactionServiceClient)
+            {
+                tranSvcClient.UpdateWithinTransaction(user);
+                tranSvcClient.CommitTransaction();
+            };
+
+            var res2 = await _cRequest.QueryRecords<Systemuser>("systemuser", fetchXml);
+            var user2 = res1.Data[0];
+            Console.WriteLine(user2.address1_name);
 
             //查询自定义接口
             //object paramList = new object();

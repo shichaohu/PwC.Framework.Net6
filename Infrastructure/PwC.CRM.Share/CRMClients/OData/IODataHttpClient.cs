@@ -1,11 +1,11 @@
-﻿using PwC.Crm.Share.PwcNetCore.Models;
+﻿using PwC.Crm.Share.CRMClients.OData.Models;
 
-namespace PwC.Crm.Share.PwcNetCore
+namespace PwC.Crm.Share.CRMClients.OData
 {
     /// <summary>
     /// CRM Client
     /// </summary>
-    public interface ICRMClient : IDisposable
+    public interface IODataHttpClient : IDisposable
     {
         Task<CrmResponse> CreateRecord<T>(string entityName, T entity, CrmParameter crmParameter = null);
 
