@@ -8,3 +8,5 @@
 /Infrastructure/PwC.CRM.Models/bin
 /Infrastructure/PwC.CRM.Share/bin
 /Infrastructure/PwC.CRM.Share/obj
+/Jobs/PwC.CRM.Job.BaseData.UpdateCustomerBalanceReceivable/bin
+/Jobs/PwC.CRM.Job.BaseData.UpdateCustomerBalanceReceivable/obj
