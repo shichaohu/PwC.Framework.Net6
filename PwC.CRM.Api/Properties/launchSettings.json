@@ -1,0 +1,70 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:11621",
+      "sslPort": 44330
+    }
+  },
+  "profiles": {
+    "PwC.CRM.Api.Dev": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      //"launchUrl": "swagger",
+      "launchUrl": "",
+      //"applicationUrl": "https://localhost:7108;http://localhost:5285",
+      "applicationUrl": "http://localhost:7108",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "PwC.CRM.Api.Sit": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      //"launchUrl": "swagger",
+      "launchUrl": "",
+      //"applicationUrl": "https://localhost:7108;http://localhost:5285",
+      "applicationUrl": "http://localhost:7108",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "SIT"
+      }
+    },
+    "PwC.CRM.Api.Uat": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      //"launchUrl": "swagger",
+      "launchUrl": "",
+      //"applicationUrl": "https://localhost:7108;http://localhost:5285",
+      "applicationUrl": "http://localhost:7108",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "UAT"
+      }
+    },
+    "PwC.CRM.Api.Pro": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      //"launchUrl": "swagger",
+      "launchUrl": "",
+      //"applicationUrl": "https://localhost:7108;http://localhost:5285",
+      "applicationUrl": "http://localhost:7108",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "PRD"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      //"launchUrl": "swagger",
+      "launchUrl": "",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

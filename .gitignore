@@ -1,1 +1,10 @@
 /.vs
+/PwC.CRM.Api/bin
+/PwC.CRM.Api/log
+/PwC.CRM.Api/obj
+/PwC.CRM.Service/bin
+/PwC.CRM.Service/obj
+/Infrastructure/PwC.CRM.Models/obj
+/Infrastructure/PwC.CRM.Models/bin
+/Infrastructure/PwC.CRM.Share/bin
+/Infrastructure/PwC.CRM.Share/obj
