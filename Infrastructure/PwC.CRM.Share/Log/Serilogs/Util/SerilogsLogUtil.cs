@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.Log.Serilogs.Util
+namespace PwC.CRM.Share.Log.Serilogs.Util
 {
     public class SerilogsLogUtil
     {

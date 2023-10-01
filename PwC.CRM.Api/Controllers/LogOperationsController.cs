@@ -2,9 +2,9 @@
 using PwC.CRM.Service.Core.LogRepositorys;
 using PwC.CRM.Service.Dto.Request;
 using Microsoft.AspNetCore.Mvc;
-using PwC.Crm.Share.BaseModel;
-using PwC.Crm.Share.Log.Serilogs.Attributes;
-using PwC.Crm.Share.Log.Serilogs.Models;
+using PwC.CRM.Share.BaseModel;
+using PwC.CRM.Share.Log.Serilogs.Attributes;
+using PwC.CRM.Share.Log.Serilogs.Models;
 
 namespace PwC.CRM.Api.Controllers
 {

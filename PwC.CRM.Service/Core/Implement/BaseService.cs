@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.PowerPlatform.Dataverse.Client;
-using PwC.Crm.Share.CRMClients;
-using PwC.Crm.Share.CRMClients.Dataverse;
-using PwC.Crm.Share.CRMClients.OData;
+using PwC.CRM.Share.CRMClients;
+using PwC.CRM.Share.CRMClients.Dataverse;
+using PwC.CRM.Share.CRMClients.OData;
 using PwC.CRM.Service.Enums;
 using PwcNetCore;
 

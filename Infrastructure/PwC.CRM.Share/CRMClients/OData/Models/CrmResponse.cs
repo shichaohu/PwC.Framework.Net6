@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.CRMClients.OData.Models
+namespace PwC.CRM.Share.CRMClients.OData.Models
 {
     public class CrmResponse : BassInfo
     {

@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.Util
+namespace PwC.CRM.Share.Util
 {
     /// <summary>
     /// 比较帮助类

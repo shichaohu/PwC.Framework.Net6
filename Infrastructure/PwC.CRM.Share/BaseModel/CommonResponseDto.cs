@@ -5,7 +5,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.BaseModel
+namespace PwC.CRM.Share.BaseModel
 {
     public class CommonResponseDto
     {

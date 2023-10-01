@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PwC.Crm.Share\PwC.CRM.Share.csproj" />
+    <ProjectReference Include="..\PwC.CRM.Share\PwC.CRM.Share.csproj" />
   </ItemGroup>
 
   <ItemGroup>

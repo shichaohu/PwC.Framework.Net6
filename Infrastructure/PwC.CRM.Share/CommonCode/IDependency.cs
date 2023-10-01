@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.CommonCode
+namespace PwC.CRM.Share.CommonCode
 {
     public interface IDependency
     {

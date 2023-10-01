@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.BaseModel
+namespace PwC.CRM.Share.BaseModel
 {
     /// <summary>
     /// appsetting.json配置

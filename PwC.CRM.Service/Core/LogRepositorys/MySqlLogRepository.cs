@@ -1,7 +1,7 @@
 ﻿using PwC.CRM.Service.Core.DapperRepositorys;
 using PwC.CRM.Service.Dto.Request;
-using PwC.Crm.Share.Log.Serilogs.Models;
-using PwC.Crm.Share.Log.Serilogs.Util;
+using PwC.CRM.Share.Log.Serilogs.Models;
+using PwC.CRM.Share.Log.Serilogs.Util;
 using Microsoft.Extensions.Configuration;
 
 namespace PwC.CRM.Service.Core.LogRepositorys

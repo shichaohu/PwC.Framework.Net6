@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static log4net.Appender.RollingFileAppender;
 
-namespace PwC.Crm.Share.Extensions
+namespace PwC.CRM.Share.Extensions
 {
     public static class DateTimeExtensions
     {

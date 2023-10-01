@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 
-namespace PwC.Crm.Share.Util
+namespace PwC.CRM.Share.Util
 {
     /// <summary>
     /// 本地缓存帮助类

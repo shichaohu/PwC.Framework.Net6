@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.Extensions
+namespace PwC.CRM.Share.Extensions
 {
     public static class EnumExtensions
     {

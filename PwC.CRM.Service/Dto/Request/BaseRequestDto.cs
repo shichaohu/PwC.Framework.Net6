@@ -1,4 +1,4 @@
-﻿using PwC.Crm.Share.CRMClients;
+﻿using PwC.CRM.Share.CRMClients;
 using System;
 using System.Collections.Generic;
 using System.Linq;

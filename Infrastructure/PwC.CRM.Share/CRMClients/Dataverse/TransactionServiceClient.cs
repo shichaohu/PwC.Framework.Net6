@@ -2,18 +2,20 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
-using PwC.Crm.Share.CRMClients.OData.Models;
+using PwC.CRM.Share.CRMClients.OData.Models;
+using PwC.CRM.Share.Util;
 using System.Reflection;
 using System.ServiceModel;
+using EntityReference = Microsoft.Xrm.Sdk.EntityReference;
 
-namespace PwC.Crm.Share.CRMClients.Dataverse
+namespace PwC.CRM.Share.CRMClients.Dataverse
 {
     public class TransactionServiceClient : ServiceClient
     {
         private ExecuteTransactionRequest _executeTransactionRequest;
 
         /// <summary>
-        /// ServiceClient  within a transaction to accept the connectionstring as a parameter
+        /// ServiceClient  in a transaction to accept the connectionstring as a parameter
         /// </summary>
         /// <param name="dataverseConnectionString">dataverseConnectionString</param>
         /// <param name="logger">Logging provider Microsoft.Extensions.Logging.ILogger</param>
@@ -32,59 +34,134 @@ namespace PwC.Crm.Share.CRMClients.Dataverse
             _executeTransactionRequest = new ExecuteTransactionRequest()
             {
                 Requests = new OrganizationRequestCollection(),
-                ReturnResponses = true,
-                RequestName = ""
+                ReturnResponses = true
             };
         }
+        #region Create
         /// <summary>
-        /// Issues a Create request to Dataverse within a transaction
+        /// Create one entity into Dataverse in a transaction
         /// </summary>
-        /// <param name="entity">Entity to create</param>
-        public void CreateWithinTransaction(Entity entity)
+        /// <param name="entity">entity to create</param>
+        public void CreateInTransaction(Entity entity)
         {
-            CreateRequest createRequest = new() { Target = entity, RequestName = entity.LogicalName };
-            _executeTransactionRequest.Requests.Add(createRequest);
+            var entityCollection = new EntityCollection()
+            {
+                EntityName = entity.LogicalName,
+                Entities = { entity }
+            };
+            CreateRequest request = new() { Target = entityCollection[0] };
+            _executeTransactionRequest.Requests.Add(request);
         }
         /// <summary>
-        /// Issues a Create request to Dataverse within a transaction
+        /// Create multiple entities into Dataverse in a transaction
+        /// </summary>
+        /// <param name="entities">entities to create</param>
+        public void CreateInTransaction(List<Entity> entities)
+        {
+            if (entities?.Count > 0)
+            {
+                var entityCollection = new EntityCollection()
+                {
+                    EntityName = entities[0].LogicalName
+                };
+                entityCollection.Entities.AddRange(entities);
+                foreach (var entity in entityCollection.Entities)
+                {
+                    CreateRequest request = new() { Target = entity };
+                    _executeTransactionRequest.Requests.Add(request);
+                }
+            }
+        }
+        /// <summary>
+        /// Create one model into Dataverse in a transaction
         /// </summary>
         /// <param name="model">model to create</param>
-        public void CreateWithinTransaction<T>(T model) where T : class, new()
+        public void CreateInTransaction<T>(T model) where T : class, new()
         {
             var entity = ConvertToEntity(model);
-            CreateWithinTransaction(entity);
+            CreateInTransaction(entity);
         }
-
         /// <summary>
-        /// Issues a Delete request to Dataverse within a transaction
+        /// Create multiple models into Dataverse in a transaction
         /// </summary>
-        /// <param name="entityName">Entity name to delete</param>
-        /// <param name="id">ID if entity to delete</param>
-        public void DeleteWithinTransaction(string entityName, Guid id)
+        /// <param name="model">model to create</param>
+        public void CreateInTransaction<T>(List<T> models) where T : class, new()
         {
-            DeleteRequest createRequest = new() { RequestId = id, RequestName = entityName };
-            _executeTransactionRequest.Requests.Add(createRequest);
+            var entities = models.Select(x => ConvertToEntity(x)).ToList();
+            CreateInTransaction(entities);
         }
+        #endregion
 
+        #region Delete
         /// <summary>
-        /// Issues an update to Dataverse within a transaction
+        /// Delete one from Dataverse in a transaction
         /// </summary>
-        /// <param name="entity">Entity to update into Dataverse</param>
-        public void UpdateWithinTransaction(Entity entity)
+        /// <param name="entityName">name of entity name to delete</param>
+        /// <param name="id">id of entity to delete</param>
+        public void DeleteInTransaction(string entityName, Guid id)
         {
-            UpdateRequest createRequest = new() { Target = entity, RequestName = entity.LogicalName };
-            _executeTransactionRequest.Requests.Add(createRequest);
+            DeleteRequest request = new() { Target = new EntityReference(entityName, id) };
+            _executeTransactionRequest.Requests.Add(request);
+        }
+        #endregion
+
+        #region Update
+        /// <summary>
+        /// Update one entity into Dataverse in a transaction
+        /// </summary>
+        /// <param name="entity">entity to update</param>
+        public void UpdateInTransaction(Entity entity)
+        {
+            var entityCollection = new EntityCollection()
+            {
+                EntityName = entity.LogicalName,
+                Entities = { entity }
+            };
+            UpdateRequest request = new() { Target = entityCollection[0] };
+            _executeTransactionRequest.Requests.Add(request);
+        }
+        /// <summary>
+        /// Update multiple entities into Dataverse in a transaction
+        /// </summary>
+        /// <param name="entities">entities to update</param>
+        public void UpdateInTransaction(List<Entity> entities)
+        {
+
+            if (entities?.Count > 0)
+            {
+                var entityCollection = new EntityCollection()
+                {
+                    EntityName = entities[0].LogicalName
+                };
+                entityCollection.Entities.AddRange(entities);
+                foreach (var entity in entityCollection.Entities)
+                {
+                    UpdateRequest request = new() { Target = entity };
+                    _executeTransactionRequest.Requests.Add(request);
+                }
+            }
         }
 
         /// <summary>
-        /// Issues an update to Dataverse within a transaction
+        /// Update one into Dataverse in a transaction
         /// </summary>
-        /// <param name="model">model to update into Dataverse</param>
-        public void UpdateWithinTransaction<T>(T model) where T : class, new()
+        /// <param name="model">model to update</param>
+        public void UpdateInTransaction<T>(T model) where T : class, new()
         {
             var entity = ConvertToEntity(model);
-            UpdateWithinTransaction(entity);
+            UpdateInTransaction(entity);
         }
+        /// <summary>
+        /// Update multiple models into Dataverse in a transaction
+        /// </summary>
+        /// <param name="model">model to create</param>
+        public void UpdateInTransaction<T>(List<T> models) where T : class, new()
+        {
+            var entities = models.Select(x => ConvertToEntity(x)).ToList();
+            UpdateInTransaction(entities);
+        }
+        #endregion
+
 
         public OrganizationResponseCollection CommitTransaction()
         {
@@ -95,7 +172,7 @@ namespace PwC.Crm.Share.CRMClients.Dataverse
             }
             catch (FaultException<OrganizationServiceFault> ex)
             {
-                string errorMsg = $"Execute OrganizationService request failed for the index {((ExecuteTransactionFault)(ex.Detail)).FaultedRequestIndex + 1} and the reason being: {ex.Detail.Message}";
+                string errorMsg = $"Execute TransactionServiceClient.CommitTransaction failed for the index {((ExecuteTransactionFault)(ex.Detail)).FaultedRequestIndex + 1} and the reason being: {ex.Detail.Message}";
                 throw new Exception(errorMsg);
             }
             finally
@@ -125,6 +202,7 @@ namespace PwC.Crm.Share.CRMClients.Dataverse
         private Entity ConvertToEntity<T>(T model) where T : class, new()
         {
             var entity = new Entity();
+            entity.LogicalName = GetEntityName<T>();
             List<PropertyInfo> list = (from w in (typeof(T)).GetProperties(BindingFlags.Instance | BindingFlags.Public)
                                        select w).ToList();
 
@@ -137,19 +215,34 @@ namespace PwC.Crm.Share.CRMClients.Dataverse
                     continue;
                 }
 
+                var fieldTypes = list[i].GetCustomAttributes();
+                CFieldType fieldType = null;
+                foreach (var attr in fieldTypes)
+                {
+                    if (attr.GetType().Name == "CFieldType")
+                    {
+                        try
+                        {
+                            var ft = attr.CopyAs<CFieldType>();
+                            if (ft != null)
+                                fieldType = (CFieldType)attr;
+                        }
+                        catch { }
+                    }
+                }
                 if (list[i].PropertyType.Name == "EntityReference")
                 {
-                    object[] customAttributes = list[i].GetCustomAttributes(typeof(CFieldType), inherit: true);
-                    if (customAttributes.Length >= 0)
+                    if (fieldType != null && Guid.TryParse(value.ToString(), out Guid erId))
                     {
-                        entity[name] = value.ToString();
+                        entity[name] = new EntityReference(fieldType.EntityName, erId);
                     }
                     continue;
                 }
 
-                if (list[i].PropertyType.IsEnum)
+                if (fieldType?.EnumType != null)
                 {
-                    entity[name] = new OptionSetValue((int)value);
+                    if (Enum.TryParse(fieldType.EnumType, value.ToString(), true, out object valueEnum))
+                        entity[name] = new OptionSetValue(valueEnum.GetHashCode());
                     continue;
                 }
 
@@ -158,6 +251,25 @@ namespace PwC.Crm.Share.CRMClients.Dataverse
 
             return entity;
         }
+
+        private string GetEntityName<T>()
+        {
+            Type type = typeof(T);
+            MethodInfo method = type.GetMethod("GetEntityKey");
+            string entityName;
+            if (method != null)
+            {
+                object obj = method.Invoke(null, null);
+                entityName = obj.ToString();
+            }
+            else
+            {
+                entityName = type.Name.ToLower();
+            }
+
+            return entityName;
+        }
+
         #endregion
     }
 }

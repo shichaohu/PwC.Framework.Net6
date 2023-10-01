@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using PwC.Crm.Share.BaseModel;
+using PwC.CRM.Share.BaseModel;
 
-namespace PwC.Crm.Share.Handlers
+namespace PwC.CRM.Share.Handlers
 {
     public class GlobalExceptionHandler : IExceptionFilter
     {

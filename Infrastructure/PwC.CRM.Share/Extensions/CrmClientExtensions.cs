@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PwC.Crm.Share.CRMClients;
-using PwC.Crm.Share.CRMClients.OData;
+using PwC.CRM.Share.CRMClients;
+using PwC.CRM.Share.CRMClients.OData;
 using PwcNetCore;
 
-namespace PwC.Crm.Share.Extensions;
+namespace PwC.CRM.Share.Extensions;
 
 public static class CrmClientExtensions
 {

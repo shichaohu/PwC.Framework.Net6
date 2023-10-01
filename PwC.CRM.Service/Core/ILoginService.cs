@@ -1,5 +1,5 @@
 ﻿using PwC.CRM.Service.Dto.Request;
-using PwC.Crm.Share.CommonCode;
+using PwC.CRM.Share.CommonCode;
 
 namespace PwC.CRM.Service.Core
 {

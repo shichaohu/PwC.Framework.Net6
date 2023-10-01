@@ -1,5 +1,4 @@
-
-namespace CrmModels
+namespace PwC.CRM.Models.Table
 {
     /// <summary>
     /// 地址 1: 地址类型
@@ -43,5 +42,22 @@ namespace CrmModels
     public enum EnumAddress2_shippingmethodcode
     {
         默认值 = 1
+    }
+
+    /// <summary>
+    /// 通知类型
+    /// apv_messgtype
+    /// </summary>
+    public enum EnumMessgtype
+    {
+        到期提醒 = 10,
+        逾期提醒 = 20,
+        变更提醒 = 30,
+        系统提醒 = 40,
+        即将到期提醒 = 50,
+        SRDM立项通知 = 60,
+        SRDM更新通知 = 70,
+        PLM系统通知 = 80,
+        SRDM系统通知 = 90
     }
 }

@@ -1,6 +1,6 @@
 ﻿using PwC.CRM.Service.Dto.Request;
-using CrmModels;
-using PwC.Crm.Share.CommonCode;
+using PwC.CRM.Share.CommonCode;
+using PwC.CRM.Models.Table;
 
 namespace PwC.CRM.Service.Core
 {

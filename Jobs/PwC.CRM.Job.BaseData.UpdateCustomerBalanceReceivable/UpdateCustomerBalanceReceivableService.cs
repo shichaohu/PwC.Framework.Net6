@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using PwC.Crm.Share.Util;
+using PwC.CRM.Share.Util;
 using PwC.CRM.Service.Dto.Request;
 
 namespace PwC.CRM.Job.BaseData.UpdateCustomerBalanceReceivable

@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 
-namespace PwC.Crm.Share.Authentication
+namespace PwC.CRM.Share.Authentication
 {
     /// <summary>
     /// 自定义认证处理器

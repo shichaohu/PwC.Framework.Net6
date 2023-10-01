@@ -1,6 +1,6 @@
 ﻿using PwC.CRM.Service.Dto.Request;
-using PwC.Crm.Share.CRMClients;
-using PwC.Crm.Share.Util;
+using PwC.CRM.Share.CRMClients;
+using PwC.CRM.Share.Util;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

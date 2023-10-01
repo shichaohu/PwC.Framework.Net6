@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
-using PwC.Crm.Share.BaseModel;
+using PwC.CRM.Share.BaseModel;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace PwC.Crm.Share.Util
+namespace PwC.CRM.Share.Util
 {
     public static class AspNetWebApiHelper
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PwC.Crm.Share.Handlers
+namespace PwC.CRM.Share.Handlers
 {
     public class UserOperationException : Exception
     {

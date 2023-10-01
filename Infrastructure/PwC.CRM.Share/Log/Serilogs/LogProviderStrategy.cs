@@ -1,7 +1,7 @@
-﻿using PwC.Crm.Share.Log.Serilogs.Enrichers;
-using PwC.Crm.Share.Log.Serilogs.Extentions;
-using PwC.Crm.Share.Log.Serilogs.Middlewares;
-using PwC.Crm.Share.Log.Serilogs.Models;
+﻿using PwC.CRM.Share.Log.Serilogs.Enrichers;
+using PwC.CRM.Share.Log.Serilogs.Extentions;
+using PwC.CRM.Share.Log.Serilogs.Middlewares;
+using PwC.CRM.Share.Log.Serilogs.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +13,7 @@ using Serilog;
 using Serilog.Events;
 
 
-namespace PwC.Crm.Share.Log.Serilogs
+namespace PwC.CRM.Share.Log.Serilogs
 {
     public static class LogProviderStrategy
     {

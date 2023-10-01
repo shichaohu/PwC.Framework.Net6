@@ -1,4 +1,4 @@
-﻿using PwC.Crm.Share.CRMClients.OData;
+﻿using PwC.CRM.Share.CRMClients.OData;
 using PwcNetCore;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.CRMClients
+namespace PwC.CRM.Share.CRMClients
 {
     /// <summary>
     /// CRM客户端工厂

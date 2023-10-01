@@ -1,7 +1,7 @@
 ﻿using Serilog.Events;
 using System.Text.Json.Serialization;
 
-namespace PwC.Crm.Share.Log.Serilogs.Models
+namespace PwC.CRM.Share.Log.Serilogs.Models
 {
     /// <summary>
     /// 日志数据库模型(简洁版-用于查询)

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.Util
+namespace PwC.CRM.Share.Util
 {
     public class DateTimeHelper
     {

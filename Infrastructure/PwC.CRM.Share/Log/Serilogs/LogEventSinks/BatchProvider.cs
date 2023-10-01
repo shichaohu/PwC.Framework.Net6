@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.Log.Serilogs.LogEventSinks
+namespace PwC.CRM.Share.Log.Serilogs.LogEventSinks
 {
     internal abstract class BatchProvider : IDisposable
     {

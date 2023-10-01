@@ -1,5 +1,5 @@
-﻿using PwC.Crm.Share.Log.Serilogs.Enrichers;
-using PwC.Crm.Share.Log.Serilogs.LogEventSinks;
+﻿using PwC.CRM.Share.Log.Serilogs.Enrichers;
+using PwC.CRM.Share.Log.Serilogs.LogEventSinks;
 using Microsoft.AspNetCore.Http;
 using Serilog;
 using Serilog.AspNetCore;
@@ -8,7 +8,7 @@ using Serilog.Core;
 using Serilog.Debugging;
 using Serilog.Events;
 
-namespace PwC.Crm.Share.Log.Serilogs.Extentions
+namespace PwC.CRM.Share.Log.Serilogs.Extentions
 {
     internal static class SerilogExtentions
     {

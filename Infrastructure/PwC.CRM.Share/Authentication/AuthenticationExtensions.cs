@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PwC.Crm.Share.Authentication;
+using PwC.CRM.Share.Authentication;
 
-namespace PwC.Crm.Share.Authentication
+namespace PwC.CRM.Share.Authentication
 {
     public static class AuthenticationExtensions
     {

@@ -1,4 +1,3 @@
-
 using Newtonsoft.Json;
 using PwcNetCore;
 using System;
@@ -6,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CrmModels
+namespace PwC.CRM.Models.Table
 {
     /// <summary>
     /// FileAttachment

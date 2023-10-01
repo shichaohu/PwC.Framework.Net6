@@ -1,6 +1,6 @@
 ﻿
 using PwC.CRM.Job.BaseData.UpdateCustomerBalanceReceivable;
-using PwC.Crm.Share.Util;
+using PwC.CRM.Share.Util;
 using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using System.Drawing.Text;

@@ -1,6 +1,6 @@
 using Microsoft.Xrm.Sdk;
 
-namespace PwC.Crm.Share.Util;
+namespace PwC.CRM.Share.Util;
 
 public static class EntityExt
 {

@@ -1,7 +1,7 @@
-﻿using PwC.Crm.Share.CRMClients.OData;
+﻿using PwC.CRM.Share.CRMClients.OData;
 using PwcNetCore;
 
-namespace PwC.Crm.Share.CRMClients
+namespace PwC.CRM.Share.CRMClients
 {
     /// <summary>
     /// CRM客户端工厂

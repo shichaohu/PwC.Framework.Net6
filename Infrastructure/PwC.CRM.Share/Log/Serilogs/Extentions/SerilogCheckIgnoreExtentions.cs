@@ -1,4 +1,4 @@
-﻿using PwC.Crm.Share.Log.Serilogs.Attributes;
+﻿using PwC.CRM.Share.Log.Serilogs.Attributes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.Log.Serilogs.Extentions
+namespace PwC.CRM.Share.Log.Serilogs.Extentions
 {
     internal static class SerilogCheckIgnoreExtentions
     {

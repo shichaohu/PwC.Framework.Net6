@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.Log.Serilogs.Attributes
+namespace PwC.CRM.Share.Log.Serilogs.Attributes
 {
     /// <summary>
     /// 忽略日志

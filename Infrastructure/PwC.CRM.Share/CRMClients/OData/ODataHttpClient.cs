@@ -1,15 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using PwC.Crm.Share.CRMClients.OData.Models;
-using PwC.Crm.Share.Util;
+using PwC.CRM.Share.CRMClients.OData.Models;
+using PwC.CRM.Share.Util;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Web;
 
-namespace PwC.Crm.Share.CRMClients.OData
+namespace PwC.CRM.Share.CRMClients.OData
 {
     /// <summary>
     ///  CRM Client

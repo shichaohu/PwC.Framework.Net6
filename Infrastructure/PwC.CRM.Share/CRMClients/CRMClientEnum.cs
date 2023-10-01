@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.CRMClients
+namespace PwC.CRM.Share.CRMClients
 {
     public enum CRMClientTypeEnum
     {

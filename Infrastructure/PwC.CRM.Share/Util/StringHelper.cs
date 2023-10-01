@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace PwC.Crm.Share.Util
+namespace PwC.CRM.Share.Util
 {
     public class StringHelper
     {

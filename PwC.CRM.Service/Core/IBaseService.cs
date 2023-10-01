@@ -1,5 +1,5 @@
 ﻿using PwC.CRM.Service.Enums;
-using PwC.Crm.Share.CommonCode;
+using PwC.CRM.Share.CommonCode;
 using PwcNetCore;
 
 namespace PwC.CRM.Service.Core

@@ -11,7 +11,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace PwC.Crm.Share.Util
+namespace PwC.CRM.Share.Util
 {
     public class HttpHelperUtil
     {

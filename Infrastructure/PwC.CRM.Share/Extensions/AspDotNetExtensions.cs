@@ -1,4 +1,4 @@
-using PwC.Crm.Share.CRMClients;
+using PwC.CRM.Share.CRMClients;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
@@ -9,10 +9,10 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using PwcNetCore;
 using System.Configuration;
 using System.Reflection;
-using PwC.Crm.Share.CommonCode;
-using PwC.Crm.Share.BaseModel;
+using PwC.CRM.Share.CommonCode;
+using PwC.CRM.Share.BaseModel;
 
-namespace PwC.Crm.Share.Extensions;
+namespace PwC.CRM.Share.Extensions;
 
 public static class AspDotNetExtensions
 {

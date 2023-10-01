@@ -1,6 +1,6 @@
 using PwC.CRM.Service.Core;
 using PwC.CRM.Service.Dto.Request;
-using PwC.Crm.Share.Log.Serilogs.Attributes;
+using PwC.CRM.Share.Log.Serilogs.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using PwC.CRM.Api.Swagger.SwaggerModel;
 

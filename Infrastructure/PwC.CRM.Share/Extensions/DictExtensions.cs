@@ -1,4 +1,4 @@
-namespace PwC.Crm.Share.Extensions;
+namespace PwC.CRM.Share.Extensions;
 
 public static class DictExtensions
 {

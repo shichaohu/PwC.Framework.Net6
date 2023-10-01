@@ -2,7 +2,7 @@
 using Serilog.Core;
 using Serilog.Events;
 
-namespace PwC.Crm.Share.Log.Serilogs.Enrichers
+namespace PwC.CRM.Share.Log.Serilogs.Enrichers
 {
     public class HttpRequestIdEnricher : ILogEventEnricher
     {

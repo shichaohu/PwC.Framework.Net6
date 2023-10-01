@@ -1,6 +1,6 @@
 ﻿using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
-using PwC.Crm.Share.BaseModel;
+using PwC.CRM.Share.BaseModel;
 using System.Text;
 
 namespace PwC.CRM.Api.Extensions.HttpClientHandlers

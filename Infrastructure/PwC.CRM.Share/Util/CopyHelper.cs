@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Reflection;
 
-namespace PwC.Crm.Share.Util
+namespace PwC.CRM.Share.Util
 {
     /// <summary>
     /// 拷贝帮助类
@@ -331,7 +331,7 @@ namespace PwC.Crm.Share.Util
                 {
                     return (enumerable as Array).Length;
                 }
-                else if(enumerable is IList)
+                else if (enumerable is IList)
                 {
                     return (enumerable as IList).Count;
                 }
@@ -352,8 +352,15 @@ namespace PwC.Crm.Share.Util
             /// <returns></returns>
             private object CreateInstance(Type type)
             {
-                var obj = Activator.CreateInstance(type);
-                return obj;
+                if (type.FullName == "System.Type")
+                {
+                    return type;
+                }
+                else
+                {
+                    var obj = Activator.CreateInstance(type);
+                    return obj;
+                }
             }
         }
         /// <summary>

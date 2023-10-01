@@ -1,4 +1,4 @@
-﻿using PwC.Crm.Share.BaseModel;
+﻿using PwC.CRM.Share.BaseModel;
 
 namespace PwC.CRM.Api.Extensions.HttpClientHandlers
 {

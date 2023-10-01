@@ -1,5 +1,5 @@
-﻿using PwC.Crm.Share.CommonCode;
-using CrmModels;
+﻿using PwC.CRM.Share.CommonCode;
+using PwC.CRM.Models.Table;
 
 namespace PwC.CRM.Service.Core
 {

@@ -1,9 +1,9 @@
 ﻿using PwC.CRM.Api.Swagger.SwaggerModel;
 using PwC.CRM.Service.Core;
 using Microsoft.AspNetCore.Mvc;
-using PwC.Crm.Share.BaseModel;
-using PwC.Crm.Share.Log.Serilogs.Attributes;
-using PwC.Crm.Share.Util;
+using PwC.CRM.Share.BaseModel;
+using PwC.CRM.Share.Log.Serilogs.Attributes;
+using PwC.CRM.Share.Util;
 
 namespace PwC.CRM.Api.Controllers
 {

@@ -1,7 +1,7 @@
 ﻿using Serilog;
 using Serilog.Events;
 
-namespace PwC.Crm.Share.Util
+namespace PwC.CRM.Share.Util
 {
     /// <summary>
     /// Serilog 记录日志

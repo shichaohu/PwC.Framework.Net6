@@ -1,4 +1,4 @@
-﻿using PwC.Crm.Share.Log.Serilogs.Extentions;
+﻿using PwC.CRM.Share.Log.Serilogs.Extentions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.Log.Serilogs.Middlewares
+namespace PwC.CRM.Share.Log.Serilogs.Middlewares
 {
     /// <summary>
     /// SerilogMiddleware

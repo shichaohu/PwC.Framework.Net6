@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwC.Crm.Share.Log.Serilogs.Models
+namespace PwC.CRM.Share.Log.Serilogs.Models
 {
     public enum LogStorageType
     {

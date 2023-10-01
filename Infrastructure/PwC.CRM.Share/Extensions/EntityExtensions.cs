@@ -1,6 +1,8 @@
 using Microsoft.Xrm.Sdk;
+using System.Reflection;
+using EntityReference = Microsoft.Xrm.Sdk.EntityReference;
 
-namespace PwC.Crm.Share.Extensions;
+namespace PwC.CRM.Share.Extensions;
 
 public static class EntityExtensions
 {
@@ -133,4 +135,100 @@ public static class EntityExtensions
     /// <param name="attr"></param>
     /// <returns></returns>
     public static string FormattedValue(this Entity entity, string attr) => entity.FormattedValues.ContainsKey(attr) ? entity.FormattedValues[attr] : null;
+
+    /// <summary>
+    /// 将entity转换成model
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    public static T ToModel<T>(this Entity entity) where T : class, new()
+    {
+        var obj = Activator.CreateInstance(typeof(T));
+        PropertyInfo[] modelPropertys = typeof(T).GetProperties();//获取目的对象的属性
+        foreach (var mPro in modelPropertys)
+        {
+            //如果目标属性无set权限，放弃对他的操作
+            if (mPro.CanWrite == false)
+            {
+                continue;
+            }
+
+            var value = GetAttributeValue(entity, mPro.Name);
+            var convertValue = GetValueToDestinationType(value, mPro);
+            mPro.SetValue(obj, convertValue, null);
+
+        }
+
+        return (T)obj;
+    }
+
+    /// <summary>
+    /// 将entity list转换成model list
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <returns></returns>
+    public static List<T> ToModelList<T>(this List<Entity> entities) where T : class, new()
+    {
+        var res = entities.Select(x => x.ToModel<T>()).ToList();
+        return res;
+    }
+
+    /// <summary>
+    /// 转换成目标类型
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="propertyInfo"></param>
+    /// <returns></returns>
+    private static object GetValueToDestinationType(object value, PropertyInfo propertyInfo)
+    {
+        Type proType = propertyInfo.PropertyType;
+        if (value == null)
+        {
+            return value;
+        }
+        //当目标类型为可null类型时，需要获取到对应的基础类型
+        if (proType.IsGenericType
+                && proType.GetGenericTypeDefinition() == typeof(Nullable<>)
+                && proType.GenericTypeArguments.Length > 0) //如果要转类型，判断是否是可null类型
+        {
+            proType = proType.GenericTypeArguments[0]; // 如果目的为可null类型必须转换为强类型才能进行赋值
+        }
+
+        if (proType.Name == "EntityReference")
+        {
+            if (value is EntityReference efVal)
+            {
+                var ef = new CRMClients.OData.Models.EntityReference(efVal.Id)
+                {
+                    logicalName = efVal.LogicalName
+                };
+                value = ef;
+            }
+        }
+        else if (proType.IsEnum)
+        {
+            value = Enum.Parse(proType, value.ToString());
+        }
+        else
+        {
+            value = Convert.ChangeType(value, proType);
+        }
+        return value;
+    }
+
+
+    private static object GetAttributeValue(Entity entity, string attributeLogicalName)
+    {
+        if (string.IsNullOrWhiteSpace(attributeLogicalName))
+        {
+            throw new ArgumentNullException("attributeLogicalName");
+        }
+
+        if (!entity.Contains(attributeLogicalName))
+        {
+            return null;
+        }
+
+        return entity[attributeLogicalName];
+    }
 }

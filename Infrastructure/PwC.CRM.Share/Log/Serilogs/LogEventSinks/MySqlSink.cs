@@ -1,4 +1,4 @@
-﻿using PwC.Crm.Share.Log.Serilogs.Util;
+﻿using PwC.CRM.Share.Log.Serilogs.Util;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Serilog.Core;
@@ -6,7 +6,7 @@ using Serilog.Debugging;
 using Serilog.Events;
 using System.Text;
 
-namespace PwC.Crm.Share.Log.Serilogs.LogEventSinks
+namespace PwC.CRM.Share.Log.Serilogs.LogEventSinks
 {
     internal class MySqlSink : BatchProvider, ILogEventSink
     {

@@ -1,6 +1,6 @@
-﻿using PwC.Crm.Share.CRMClients.OData.Models;
+﻿using PwC.CRM.Share.CRMClients.OData.Models;
 
-namespace PwC.Crm.Share.CRMClients.OData
+namespace PwC.CRM.Share.CRMClients.OData
 {
     /// <summary>
     /// CRM Client

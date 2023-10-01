@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace PwC.Crm.Share.Util
+namespace PwC.CRM.Share.Util
 {
 
     /// <summary>
