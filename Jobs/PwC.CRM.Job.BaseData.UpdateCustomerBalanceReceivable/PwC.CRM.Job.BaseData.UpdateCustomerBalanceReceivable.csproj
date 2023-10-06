@@ -21,12 +21,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Reference Include="PwcNetCore">
-	    <HintPath>..\..\Infrastructure\PwC.Crm.Models\Dll\PwcNetCore.dll</HintPath>
-	  </Reference>
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Update="appsettings.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

@@ -1,16 +1,10 @@
-using PwC.CRM.Share.CRMClients;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Org.BouncyCastle.Asn1.Ocsp;
-using PwcNetCore;
-using System.Configuration;
-using System.Reflection;
-using PwC.CRM.Share.CommonCode;
 using PwC.CRM.Share.BaseModel;
+using PwC.CRM.Share.CommonCode;
+using System.Reflection;
 
 namespace PwC.CRM.Share.Extensions;
 

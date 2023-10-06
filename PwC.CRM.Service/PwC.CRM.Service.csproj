@@ -35,10 +35,4 @@
     <Folder Include="Helper\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="PwcNetCore">
-      <HintPath>..\Infrastructure\PwC.CRM.Models\Dll\PwcNetCore.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

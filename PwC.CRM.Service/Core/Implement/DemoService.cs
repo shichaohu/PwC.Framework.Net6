@@ -54,17 +54,17 @@ namespace PwC.CRM.Service.Core.Implement
                 tranSvcClient.UpdateInTransaction(new List<Systemuser> { user });
 
                 tranSvcClient.DeleteInTransaction("apv_message", new Guid("6e83ccae-3560-ee11-8df0-000d3aa08d08"));
-                var tranRresponse = tranSvcClient.CommitTransaction();
+                var tranResponse = tranSvcClient.CommitTransaction();
             };
 
-            //CRequest
-            var res2 = await _cRequest.QueryRecords<Systemuser>("systemuser", fetchXml);
+            //ODataHttpClient
+            var res2 = await _oDataHttpClient.QueryRecords<Systemuser>("systemuser", fetchXml);
             var user2 = res1.Data[0];
             Console.WriteLine(user2.address1_name);
 
             //查询自定义接口
             //object paramList = new object();
-            //_cRequest.Execute<Systemuser>("api名称", paramList);
+            //_oDataHttpClient.Execute<Systemuser>("api名称", paramList);
 
 
             return new List<Systemuser>();

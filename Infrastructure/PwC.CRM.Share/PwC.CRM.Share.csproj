@@ -27,10 +27,4 @@
 		<PackageReference Include="Serilog.Sinks.MySQL" Version="5.0.0" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Reference Include="PwcNetCore">
-	    <HintPath>..\PwC.Crm.Models\Dll\PwcNetCore.dll</HintPath>
-	  </Reference>
-	</ItemGroup>
-
 </Project>

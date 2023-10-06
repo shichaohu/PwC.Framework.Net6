@@ -1,9 +1,5 @@
 using Newtonsoft.Json;
-using PwcNetCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using PwC.CRM.Share.CRMClients.OData.Models;
 
 namespace PwC.CRM.Models.Table
 {

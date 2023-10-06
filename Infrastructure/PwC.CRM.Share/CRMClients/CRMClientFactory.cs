@@ -1,5 +1,4 @@
 ﻿using PwC.CRM.Share.CRMClients.OData;
-using PwcNetCore;
 
 namespace PwC.CRM.Share.CRMClients
 {
@@ -8,35 +7,15 @@ namespace PwC.CRM.Share.CRMClients
     /// </summary>
     public class CRMClientFactory : ICRMClientFactory
     {
-        private Dictionary<CRMClientTypeEnum, ICrequest> _crequestDic;
         private Dictionary<CRMClientTypeEnum, IODataHttpClient> _oDataHttpClientDic;
         private Dictionary<CRMClientTypeEnum, string> _crmConnectionStringDic;
         public CRMClientFactory()
         {
-            _crequestDic = new Dictionary<CRMClientTypeEnum, ICrequest> { };
             _oDataHttpClientDic = new Dictionary<CRMClientTypeEnum, IODataHttpClient> { };
             _crmConnectionStringDic = new Dictionary<CRMClientTypeEnum, string> { };
 
         }
 
-        public void AddCrequest(CRMClientTypeEnum clientType, ICrequest client)
-        {
-            if (!_crequestDic.ContainsKey(clientType))
-            {
-                _crequestDic.Add(clientType, client);
-            }
-        }
-        public ICrequest GetCrequest(CRMClientTypeEnum clientType)
-        {
-            if (_crequestDic.ContainsKey(clientType))
-            {
-                return _crequestDic[clientType];
-            }
-            else
-            {
-                return _crequestDic[CRMClientTypeEnum.Default];
-            }
-        }
         public void AddODataHttpClient(CRMClientTypeEnum clientType, IODataHttpClient client)
         {
             if (!_oDataHttpClientDic.ContainsKey(clientType))

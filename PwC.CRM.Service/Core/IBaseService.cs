@@ -1,6 +1,6 @@
 ﻿using PwC.CRM.Service.Enums;
 using PwC.CRM.Share.CommonCode;
-using PwcNetCore;
+using PwC.CRM.Share.CRMClients.OData.Models;
 
 namespace PwC.CRM.Service.Core
 {

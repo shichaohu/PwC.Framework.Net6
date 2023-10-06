@@ -111,17 +111,17 @@ namespace PwC.CRM.Service.Core.Implement
 
         private async Task<List<ApiUser>> LoadAllApiUsersToCache()
         {
-            var rList = await _cRequest.QueryRecords<ApiUser>("pwc_apiusers?$select=pwc_name,pwc_clientid,pwc_clientsecret,pwc_scope,pwc_roles");
-            if (rList.value == null || rList.value.Count == 0)
+            var rList = await _oDataHttpClient.QueryRecords<ApiUser>("pwc_apiusers?$select=pwc_name,pwc_clientid,pwc_clientsecret,pwc_scope,pwc_roles");
+            if (rList.Data == null || rList.Data.Count == 0)
             {
-                string msg = $"There is no user in table【pwc_apiusers】" + rList.message;
+                string msg = $"There is no user in table【pwc_apiusers】" + rList.Message;
                 string logMsg = $"LoginService: {msg}";
                 _logger.LogError(logMsg);
                 throw new Exception(msg);
             }
-            _cache.SetValue(_loginUsersCacheKey, rList.value, TimeSpan.FromHours(24));
+            _cache.SetValue(_loginUsersCacheKey, rList.Data, TimeSpan.FromHours(24));
 
-            return rList.value;
+            return rList.Data;
         }
     }
 }

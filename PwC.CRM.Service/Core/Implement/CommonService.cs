@@ -3,7 +3,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using PwC.CRM.Models.Table;
-using PwcNetCore;
+using PwC.CRM.Share.CRMClients.OData.Models;
 
 namespace PwC.CRM.Service.Core.Implement
 {
@@ -32,13 +32,13 @@ namespace PwC.CRM.Service.Core.Implement
                     </filter>
                   </entity>
                 </fetch>";
-            var result = await _cRequest.QueryRecords<Systemuser>("systemuser", fetchXml);
-            if (result.code != ResultCode.Success || result.value.Count == 0)
+            var result = await _oDataHttpClient.QueryRecords<Systemuser>("systemuser", fetchXml);
+            if (result.Code != ResultCode.Success || result.Data.Count == 0)
             {
                 return null;
             }
 
-            return result.value.First();
+            return result.Data.First();
         }
         /// <summary>
         /// 查询crm的用户信息(全部字段)
@@ -56,14 +56,14 @@ namespace PwC.CRM.Service.Core.Implement
                     </filter>
                   </entity>
                 </fetch>";
-            var result = await _cRequest.QueryRecords<Systemuser>("systemuser", fetchXml);
-            if (result.code != ResultCode.Success || result.value.Count == 0)
+            var result = await _oDataHttpClient.QueryRecords<Systemuser>("systemuser", fetchXml);
+            if (result.Code != ResultCode.Success || result.Data.Count == 0)
             {
                 string message = $"未在CRM中查询到工号({userNo})对应的用户信息";
                 throw new Exception(message);
             }
 
-            return result.value.First();
+            return result.Data.First();
         }
         #endregion
 
@@ -83,14 +83,14 @@ namespace PwC.CRM.Service.Core.Implement
                     </filter>
                   </entity>
                 </fetch>";
-            var result = await _cRequest.QueryRecords<Transactioncurrency>("transactioncurrency", fetchXml);
-            if (result.code != ResultCode.Success || result.value.Count == 0)
+            var result = await _oDataHttpClient.QueryRecords<Transactioncurrency>("transactioncurrency", fetchXml);
+            if (result.Code != ResultCode.Success || result.Data.Count == 0)
             {
                 string message = $"未在CRM中查询到货币代码({isoCurrencyCode})对应的货币信息";
                 throw new Exception(message);
             }
 
-            return result.value.First();
+            return result.Data.First();
         }
         /// <summary>
         /// 查询entity的文件附件

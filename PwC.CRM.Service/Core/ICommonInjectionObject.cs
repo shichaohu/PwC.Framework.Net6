@@ -1,8 +1,7 @@
-﻿using PwC.CRM.Share.CommonCode;
-using PwC.CRM.Share.CRMClients;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using PwcNetCore;
+using PwC.CRM.Share.CommonCode;
+using PwC.CRM.Share.CRMClients;
 
 namespace PwC.CRM.Service.Core
 {

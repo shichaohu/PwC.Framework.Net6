@@ -1,16 +1,14 @@
 ﻿
+using Microsoft.Extensions.Configuration;
 using PwC.CRM.Job.BaseData.UpdateCustomerBalanceReceivable;
 using PwC.CRM.Share.Util;
-using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
-using System.Drawing.Text;
 
 
 Stopwatch watch = new();
 try
 {
     var config = InitConfiguration();
-    var crequest = InitCRequest(config);
 
     SerilLogHelper.WriteLog("Job执行开始。", SerilLogLogLevel.Info);
     watch.Start();
@@ -36,19 +34,5 @@ static IConfigurationRoot InitConfiguration()
         .AddJsonFile("appsettings.json", true, true)
         .Build();
     return config;
-
-}
-
-/// <summary>
-/// 初始化CRequest
-/// </summary>
-static PwcNetCore.CRequest InitCRequest(IConfigurationRoot config)
-{
-    return new PwcNetCore.CRequest(
-            config["Crm:resourceUrl"],
-            config["Crm:clientId"],
-            config["Crm:clientSecret"],
-            config["Crm:tenantId"],
-            config["Crm:tokenUrl"]);
 
 }

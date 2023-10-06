@@ -1,17 +1,16 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using PwC.CRM.Service.Enums;
 using PwC.CRM.Share.CRMClients;
 using PwC.CRM.Share.CRMClients.Dataverse;
 using PwC.CRM.Share.CRMClients.OData;
-using PwC.CRM.Service.Enums;
-using PwcNetCore;
+using PwC.CRM.Share.CRMClients.OData.Models;
 
 namespace PwC.CRM.Service.Core.Implement
 {
     public class BaseService : IBaseService
     {
         protected readonly IConfiguration _configuration;
-        protected readonly ICrequest _cRequest;
         protected readonly IODataHttpClient _oDataHttpClient;
         protected readonly ICRMClientFactory _crmClientFactory;
         protected readonly string _crmConnectionString;
@@ -42,13 +41,11 @@ namespace PwC.CRM.Service.Core.Implement
                 if (Enum.TryParse(targetCRMService, out CRMClientTypeEnum crmClientTypeEnum))
                 {
                     _crmConnectionString = _crmClientFactory.GetConnectString(crmClientTypeEnum);
-                    _cRequest = _crmClientFactory.GetCrequest(crmClientTypeEnum);
                     _oDataHttpClient = _crmClientFactory.GetODataHttpClient(crmClientTypeEnum);
                 }
             }
 
             _crmConnectionString ??= _crmClientFactory.GetConnectString(CRMClientTypeEnum.Default);
-            _cRequest ??= _crmClientFactory.GetCrequest(CRMClientTypeEnum.Default);
             _oDataHttpClient ??= _crmClientFactory.GetODataHttpClient(CRMClientTypeEnum.Default);
 
 
@@ -131,14 +128,14 @@ namespace PwC.CRM.Service.Core.Implement
                     {filterConditions}
                   </entity>
                 </fetch>";
-            var result = await _cRequest.QueryRecords<T>(entityName, fetchXml);
+            var result = await _oDataHttpClient.QueryRecords<T>(entityName, fetchXml);
 
-            if (result.code != ResultCode.Success || result.value == null)
+            if (result.Code != ResultCode.Success || result.Data == null)
             {
-                string message = $"查询实体表({entityName})出错：{result.message}";
+                string message = $"查询实体表({entityName})出错：{result.Message}";
                 throw new Exception(message);
             }
-            return result.value;
+            return result.Data;
 
         }
 
@@ -150,7 +147,7 @@ namespace PwC.CRM.Service.Core.Implement
         /// <returns></returns>
         public async Task<CrmResponse> UpdateEntity<T>(Guid id, T entity)
         {
-            var result = await _cRequest.UpdateRecords(id, entity);
+            var result = await _oDataHttpClient.UpdateRecord(id, entity);
             return result;
         }
 
