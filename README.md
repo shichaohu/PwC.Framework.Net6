@@ -38,6 +38,9 @@
     - [8.2 接口分组](#82-接口分组)
   - [九、自定义HttpClient（程序内发起http请求）](#九自定义httpclient程序内发起http请求)
     - [9.1 .net6 中HttpClient的3种使用方式](#91-net6-中httpclient的3种使用方式)
+      - [9.1.1、直接使用方式](#911直接使用方式)
+      - [9.1.2、命名式使用方式](#912命名式使用方式)
+      - [9.1.3、类型化使用方式（当前框架使用此种方式）](#913类型化使用方式当前框架使用此种方式)
   - [十、系统日志](#十系统日志)
     - [10.1、代码](#101代码)
       - [a、开启代码](#a开启代码)
@@ -518,7 +521,7 @@ public class DemoController : BaseController<DemoController>
     <summary>设计</summary>
 
 ### 9.1 .net6 中HttpClient的3种使用方式
-- 9.1.1、直接使用方式
+#### 9.1.1、直接使用方式
 ```C#
 builder.Services.AddHttpClient();
 
@@ -540,7 +543,7 @@ public class ValuesController:BaseController
 }
 ```
 
-- 9.1.2、命名式使用方式
+#### 9.1.2、命名式使用方式
 ```C#
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient("github",
@@ -568,7 +571,7 @@ public class ValuesController : BaseController
     }
 }
 ```
-- 9.1.3、类型化使用方式（当前框架使用此种方式）
+#### 9.1.3、类型化使用方式（当前框架使用此种方式）
   - 代码开启program.cs
     ```C#
     var builder = WebApplication.CreateBuilder(args);
