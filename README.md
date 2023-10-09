@@ -168,7 +168,7 @@ builder.Services.UseFileUpload(builder.WebHost);
 
 ## 三、Application Insights
 <details> 
-    <summary>基本功能设计</summary>
+    <summary>设计</summary>
 
 ### 1. 说明
 
@@ -176,7 +176,10 @@ builder.Services.UseFileUpload(builder.WebHost);
 
 [github上的topic]( https://github.com/topics/application-insights)
 ```
-Application Insights是微软基于Azure平台所提供的一个应用程序性能管理 (APM) 服务(类似Skywalking)， 使用它可以监视实时 Web 应用程序，自动检测性能异常。 其中包含强大的分析工具来帮助诊断问题，了解用户在应用中实际执行了哪些操作。同时也对js/java/python等之类非微软家的产品它也提供支持。
+Application Insights是微软基于Azure平台所提供的一个应用程序性能管理 (APM) 服务(类似Skywalking)。
+ 使用它可以监视实时 Web 应用程序，自动检测性能异常。 
+ 其中包含强大的分析工具来帮助诊断问题，了解用户在应用中实际执行了哪些操作。
+ 同时也对js/java/python等之类非微软家的产品它也提供支持。
 ```
 ### 2. 代码开启program.cs
 ```C#
@@ -200,19 +203,21 @@ builder.Services.Configure<TelemetryConfiguration>(x =>
 
 ```
 ### 4.效果图
-![Alt text](image.png)
-![Alt text](image-1.png)
+![效果图1](image.png)
+![效果图2](image-1.png)
+![效果图1](resource/applicationInsights_01.pngimage.png)
+![效果图2](resource/applicationInsights_02.pngimage-1.png)
 </details>
 
 ## 四、CRMClients
 <details> 
-    <summary>设计</summary>
+    <summary>设计（基础功能）</summary>
 
 ### 1. 说明
 #### CRMClients操作Dataverse的2中方式
-- 方式1.IODataHttpClient
-  - 底层实现:http请求
-- 方式2.TransactionServiceClient
+- 方式1：IODataHttpClient
+  - 底层实现：http请求
+- 方式2：TransactionServiceClient
   - 底层实现：基于连接(wcf方式)，支持事务
 ### 2. 代码开启program.cs
 ```C#
@@ -284,30 +289,36 @@ Target-CRM-Service:HK
 //a.继承BaseService
 //b.使用_oDataHttpClient操作Dataverse
 //c.使用TransactionServiceClient操作Dataverse
-public async Task<List<Systemuser>> GetBusinessunit(XxxRequestDto parameter)
+public class DemoService : BaseService, IDemoService
 {
-    string fetchXml = $@"
-        <fetch xmlns:generator='MarkMpn.SQL4CDS' top='1'>
-          <entity name='systemuser'>
-            <all-attributes />
-            <filter>
-              <condition attribute='employeeid' operator='eq' value='S1121072' />
-            </filter>
-          </entity>
-        </fetch>";
-    //IODataHttpClient fetchXml查询
-    var res1 = await _oDataHttpClient.QueryRecords<Systemuser>(fetchXml);
-    
-    //TransactionServiceClient fetchXml查询
-    var tranSvcClient = TransactionServiceClient;
-    EntityCollection entColl = tranSvcClient.RetrieveMultiple(new FetchExpression(fetchXml2));
-    var res2 = entColl.Entities.ToModelList<Link_Apv_Message>();
+    public DemoService(ICommonInjectionObject commonInjectionObject) : base(commonInjectionObject)
+    {
+    }
+  public async Task<List<Systemuser>> GetBusinessunit(XxxRequestDto parameter)
+  {
+      string fetchXml = $@"
+          <fetch xmlns:generator='MarkMpn.SQL4CDS' top='1'>
+            <entity name='systemuser'>
+              <all-attributes />
+              <filter>
+                <condition attribute='employeeid' operator='eq' value='S1121072' />
+              </filter>
+            </entity>
+          </fetch>";
+      //IODataHttpClient fetchXml查询
+      var res1 = await _oDataHttpClient.QueryRecords<Systemuser>(fetchXml);
+      
+      //TransactionServiceClient fetchXml查询
+      var tranSvcClient = TransactionServiceClient;
+      EntityCollection entColl = tranSvcClient.RetrieveMultiple(new FetchExpression(fetchXml2));
+      var res2 = entColl.Entities.ToModelList<Link_Apv_Message>();
 
-    //TransactionServiceClient 但表基本查询
-    var users3 = tranSvcClient.Retrieve("systemuser", user.systemuserid.Value, new ColumnSet(true));
-    var res3 = users3.ToModel<Systemuser>();   
+      //TransactionServiceClient 单表基本查询
+      var users3 = tranSvcClient.Retrieve("systemuser", user.systemuserid.Value, new ColumnSet(true));
+      var res3 = users3.ToModel<Systemuser>();   
 
-    return new List<Systemuser>();
+      return new List<Systemuser>();
+  }
 }
 ```
 </details>
@@ -468,7 +479,8 @@ public class DemoController : BaseController<DemoController>
 ```C#
 builder.Services.AddHttpClient();
 
-public class ValuesController:BaseController{
+public class ValuesController:BaseController
+{
   private readonly IHttpClientFactory _httpClientFactory;
   public ValuesController(IHttpClientFactory httpClientFactory)
   {
@@ -481,7 +493,8 @@ public class ValuesController:BaseController{
       client.BaseAddress = new Uri("http://www.xxx.com");
       string result = await client.GetStringAsync("/");
       return Ok(result);
-  }}
+  }
+}
 ```
 
 - 9.1.2、命名式使用方式
@@ -494,6 +507,23 @@ builder.Services.AddHttpClient("github",
         c.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
     }
 );
+```
+```C#
+public class ValuesController : BaseController 
+{ 
+    private readonly IHttpClientFactory _httpClientFactory; 
+    public ValuesController(IHttpClientFactory httpClientFactory) 
+    { 
+        _httpClientFactory = httpClientFactory;
+    }
+    [HttpGet] 
+    public async Task<ActionResult> Get() 
+    { 
+        var client = _httpClientFactory.CreateClient("github"); 
+        string result = await client.GetStringAsync("/"); 
+        return Ok(result);
+    }
+}
 ```
 - 9.1.3、类型化使用方式（当前框架使用此种方式）
   - 代码开启program.cs
