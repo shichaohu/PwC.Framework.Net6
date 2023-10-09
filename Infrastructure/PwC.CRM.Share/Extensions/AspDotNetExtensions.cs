@@ -16,7 +16,7 @@ public static class AspDotNetExtensions
     /// </summary>
     /// <param name="services"></param>
     /// <param name="projectName">项目名称前缀，一般用于依赖注入层，如service</param>
-    public static void UseAutoDependency(this IServiceCollection services, string projectName)
+    public static void AddAutoDependency(this IServiceCollection services, string projectName)
     {
         var assemblies = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll")
             .Select(x => Assembly.Load(AssemblyName.GetAssemblyName(x)))
@@ -34,10 +34,10 @@ public static class AspDotNetExtensions
 
 
     /// <summary>
-    /// 模型绑定 特性验证
+    /// Adds the model state vrify service to the specified IServiceCollection
     /// </summary>
     /// <param name="services"></param>
-    public static void UseModelStatevVrify(this IServiceCollection services)
+    public static void AddModelStateVrify(this IServiceCollection services)
     {
         services.Configure<ApiBehaviorOptions>(options =>
         {

@@ -21,8 +21,6 @@ namespace PwC.CRM.Api.Controllers
         protected IConfiguration _configuration;
         protected IConfiguration Configuration => _configuration ??= HttpContext.RequestServices.GetService<IConfiguration>();
 
-        protected BlobContainerClient blobContainerClient => HttpContext.RequestServices.GetService<BlobContainerClient>();
-
         #region private
 
         #endregion

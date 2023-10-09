@@ -57,10 +57,10 @@ namespace PwC.CRM.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("ClearLoginUserToken")]
-        public OkObjectResult ClearLoginUserToken()
+        public ActionResult ClearLoginUserToken()
         {
             _loginService.ClearLoginUserToken();
-            return Ok(new { a = 1 });
+            return Ok();
         }
     }
 

@@ -629,4 +629,18 @@ namespace PwC.CRM.Models.Table
         }
     }
 
+    /// <summary>
+    /// 客户账户信息
+    /// apv_accountinfo
+    /// </summary>
+    public class Link_Apv_Message : Apv_Message
+    {
+
+        ///<summary>
+        /// 客户付款信息
+        ///</summary>    
+        public Systemuser link_owner { get; set; }
+
+    }
+
 }

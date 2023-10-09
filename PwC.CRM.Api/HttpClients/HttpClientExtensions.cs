@@ -11,7 +11,7 @@ namespace PwC.CRM.Api.HttpClients
     public static class HttpClientExtensions
     {
         /// <summary>
-        /// 注册ECMHttpClient
+        /// Adds customer HttpClient to the specified IServiceCollection
         /// </summary>
         /// <param name="services"></param>
         /// <param name="configuration"></param>

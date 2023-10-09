@@ -16,12 +16,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(builder.Configuration);
 
 builder.Services.UseFileUpload(builder.WebHost);
+
 //enables Application Insights telemetry collection.
 builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.Configure<TelemetryConfiguration>(x =>
     x.DisableTelemetry = bool.TryParse(builder.Configuration["ApplicationInsights:DisableTelemetry"], out bool disableTelemetry) && disableTelemetry
 );
-
 
 builder.Services.AddControllers(option =>
 {
@@ -30,8 +30,8 @@ builder.Services.AddControllers(option =>
 })
     .AddNewtonsoftJson(options =>
     {
-        options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+        options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+        options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
         options.SerializerSettings.Converters.Add(new IsoDateTimeConverter() { DateTimeFormat = "yyyy-MM-dd HH:mm:ss" });
     })
     .AddJsonOptions(options =>
@@ -39,18 +39,13 @@ builder.Services.AddControllers(option =>
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
-#region 添加服务依赖  
-builder.Services.UseCRMClients(builder.Configuration);
-#endregion
-
-// 自动注入PwC.CRM.Service.Core中实现IDependency的接口
-builder.Services.UseAutoDependency("PwC.CRM.Service");
+builder.Services.AddCRMClients(builder.Configuration);
+builder.Services.AddAutoDependency("PwC.CRM.Service");
 builder.Services.AddSingleton<LocalCachelper>();
-builder.Services.AddSingleton(x => new BlobContainerClient(builder.Configuration.GetSection("AzureBlob:connString").Value, "files"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddMemoryCache();
-builder.Services.UseModelStatevVrify();
+builder.Services.AddModelStateVrify();
 
 builder.Services.AddCors(policy =>
 {
@@ -64,14 +59,12 @@ builder.Services.AddCors(policy =>
 builder.Services.AddSwaggerDoc(builder.Configuration);
 builder.Services.AddCustomerHttpClient(builder.Configuration);
 
-builder.Host.UseLogStrategy(builder.Logging, builder.Services, builder.Configuration);
+builder.Host.AddLogStrategy(builder.Logging, builder.Services, builder.Configuration);
 
 
 var app = builder.Build();
-app.AddLogStrategy(app.Environment);
+app.UseLog(app.Environment);
 app.UseCors("CorsPolicy");
-
-//启用中间件服务生成Swagger作为JSON终结点
 app.UseSwaggerUi(builder.Configuration, app.Environment);
 
 //app.UseHttpsRedirection();

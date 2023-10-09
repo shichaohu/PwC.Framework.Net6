@@ -147,27 +147,56 @@ public static class EntityExtensions
         PropertyInfo[] modelPropertys = typeof(T).GetProperties();//获取目的对象的属性
         foreach (var mPro in modelPropertys)
         {
-            //如果目标属性无set权限，放弃对他的操作
-            if (mPro.CanWrite == false)
+            try
             {
-                continue;
+                //如果目标属性无set权限，放弃对他的操作
+                if (mPro.CanWrite == false)
+                {
+                    continue;
+                }
+                if (mPro.PropertyType != typeof(string) && mPro.PropertyType.IsClass)//link对象
+                {
+                    var linkObj = Activator.CreateInstance(mPro.PropertyType);
+                    PropertyInfo[] linkPropertys = mPro.PropertyType.GetProperties();
+                    foreach (var linkPro in linkPropertys)
+                    {
+                        try
+                        {
+                            var linkProvalue = entity.GetAttributeValue<AliasedValue>($"{mPro.Name}.{linkPro.Name}")?.Value;
+                            var convertLinkValue = GetValueToDestinationType(linkProvalue, linkPro);
+                            linkPro.SetValue(linkObj, convertLinkValue, null);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception($"Error happend when get value of [{typeof(T).Name}.{mPro.Name}.{linkPro.Name}], {ex.Message}");
+                        }
+                    }
+
+                    mPro.SetValue(obj, linkObj, null);
+                }
+                else
+                {
+                    var proValue = GetAttributeValue(entity, mPro.Name);
+                    var convertProValue = GetValueToDestinationType(proValue, mPro);
+                    mPro.SetValue(obj, convertProValue, null);
+                }
             }
-
-            var value = GetAttributeValue(entity, mPro.Name);
-            var convertValue = GetValueToDestinationType(value, mPro);
-            mPro.SetValue(obj, convertValue, null);
-
+            catch (Exception ex)
+            {
+                throw new Exception($"Error happend when get value of [{typeof(T).Name}.{mPro.Name}], {ex.Message}");
+            }
         }
 
         return (T)obj;
     }
+
 
     /// <summary>
     /// 将entity list转换成model list
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
-    public static List<T> ToModelList<T>(this List<Entity> entities) where T : class, new()
+    public static List<T> ToModelList<T>(this IList<Entity> entities) where T : class, new()
     {
         var res = entities.Select(x => x.ToModel<T>()).ToList();
         return res;
@@ -207,7 +236,14 @@ public static class EntityExtensions
         }
         else if (proType.IsEnum)
         {
-            value = Enum.Parse(proType, value.ToString());
+            if (value is OptionSetValue osValue)
+            {
+                value = Enum.Parse(proType, osValue.Value.ToString(), true);
+            }
+            else
+            {
+                value = Enum.Parse(proType, value.ToString(), true);
+            }
         }
         else
         {

@@ -15,7 +15,7 @@ namespace PwC.CRM.Api.Swagger;
 public static class SwaggerExtensions
 {
     /// <summary>
-    /// Register the SwaggerDoc Service
+    ///Adds the SwaggerDoc service to the specified IServiceCollection
     /// </summary>
     /// <param name="services"></param>
     /// <param name="configuration"></param>
@@ -81,7 +81,7 @@ public static class SwaggerExtensions
         });
     }
     /// <summary>
-    /// Register the SwaggerUI middleware
+    /// Adds the SwaggerUi middleware to IApplicationBuilder
     /// </summary>
     /// <param name="app"></param>
     /// <param name="configuration"></param>

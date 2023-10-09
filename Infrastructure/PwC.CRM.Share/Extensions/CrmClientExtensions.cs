@@ -7,8 +7,12 @@ namespace PwC.CRM.Share.Extensions;
 
 public static class CrmClientExtensions
 {
-
-    public static void UseCRMClients(this IServiceCollection services, IConfiguration configuration)
+    /// <summary>
+    /// Adds CRM clients to the specified IServiceCollection
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="configuration"></param>
+    public static void AddCRMClients(this IServiceCollection services, IConfiguration configuration)
     {
         CRMClientFactory clientFactory = new();
 

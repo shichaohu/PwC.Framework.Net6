@@ -10,9 +10,10 @@ using EntityReference = Microsoft.Xrm.Sdk.EntityReference;
 
 namespace PwC.CRM.Share.CRMClients.Dataverse
 {
-    public class TransactionServiceClient : ServiceClient
+    public class TransactionServiceClient : ServiceClient, IDisposable
     {
         private ExecuteTransactionRequest _executeTransactionRequest;
+        private bool _hasTransactionCommit;
 
         /// <summary>
         /// ServiceClient  in a transaction to accept the connectionstring as a parameter
@@ -165,6 +166,8 @@ namespace PwC.CRM.Share.CRMClients.Dataverse
 
         public OrganizationResponseCollection CommitTransaction()
         {
+            if (_hasTransactionCommit) return default;
+            _hasTransactionCommit = true;
             try
             {
                 var responseForCreateRecords = (ExecuteTransactionResponse)base.Execute(_executeTransactionRequest);
@@ -271,5 +274,12 @@ namespace PwC.CRM.Share.CRMClients.Dataverse
         }
 
         #endregion
+        public void Dispose()
+        {
+            if (!_hasTransactionCommit)
+            {
+                CommitTransaction();
+            }
+        }
     }
 }

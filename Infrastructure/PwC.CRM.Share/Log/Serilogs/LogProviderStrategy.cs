@@ -15,10 +15,19 @@ using Serilog.Events;
 
 namespace PwC.CRM.Share.Log.Serilogs
 {
+    /// <summary>
+    /// Register log strategy
+    /// </summary>
     public static class LogProviderStrategy
     {
-
-        public static void UseLogStrategy(this IHostBuilder hostBuilder, ILoggingBuilder loggingBuilder, IServiceCollection service, IConfiguration configuration)
+        /// <summary>
+        /// Adds a log strategy service to the specified IHostBuilder.
+        /// </summary>
+        /// <param name="hostBuilder"></param>
+        /// <param name="loggingBuilder"></param>
+        /// <param name="service"></param>
+        /// <param name="configuration"></param>
+        public static void AddLogStrategy(this IHostBuilder hostBuilder, ILoggingBuilder loggingBuilder, IServiceCollection service, IConfiguration configuration)
         {
             service.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             loggingBuilder.ClearProviders();
@@ -31,15 +40,6 @@ namespace PwC.CRM.Share.Log.Serilogs
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Error)
                 .MinimumLevel.Override("System", LogEventLevel.Error)
                 .Filter.ByIncludingOnly(x => x.CheckCanWriteLog(httpContext))
-                //.Filter.ByExcluding(c =>
-                //        {
-                //            bool allowLogSourceContext = c.Properties.TryGetValue("SourceContext", out LogEventPropertyValue sourceContext) &&
-                //                  ((((ScalarValue)sourceContext).Value ?? "").ToString().StartsWith("Microsoft")
-                //                  || (((ScalarValue)sourceContext).Value ?? "").ToString().StartsWith("System"));
-
-                //            return allowLogSourceContext;
-                //        }
-                //    )
                 .Enrich.With(new HttpHostEnricher(httpContext))
                 .Enrich.With(new HttpRemoteAddressEnricher(httpContext))
                 .Enrich.With(new HttpXForwardedForEnricher(httpContext))
@@ -71,7 +71,12 @@ namespace PwC.CRM.Share.Log.Serilogs
 
             loggingBuilder.SetMinimumLevel(LogLevel.Information);
         }
-        public static void AddLogStrategy(this IApplicationBuilder app, IWebHostEnvironment env)
+        /// <summary>
+        /// Adds the log middleware to IApplicationBuilder
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
+        public static void UseLog(this IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseSerilogIgnore(env);
             app.UseMiddleware<HttpContextLoggingMiddleware>();
