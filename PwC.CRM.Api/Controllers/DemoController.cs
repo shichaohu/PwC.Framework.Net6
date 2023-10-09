@@ -3,11 +3,13 @@ using PwC.CRM.Service.Dto.Request;
 using PwC.CRM.Share.Log.Serilogs.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using PwC.CRM.Api.Swagger.SwaggerModel;
+using PwC.CRM.Api.HttpClients.HttpClientHandlers;
+using PwC.CRM.Share.BaseModel;
 
 namespace PwC.CRM.Api.Controllers
 {
     /// <summary>
-    /// XxxDemo
+    /// Demo
     /// </summary>
     [ApiController]
     [Route("api/[controller]/[action]")]
@@ -16,12 +18,14 @@ namespace PwC.CRM.Api.Controllers
     public class DemoController : BaseController<DemoController>
     {
         private readonly ILogger<DemoController> _logger;
+        private readonly SRDMHttpClient _sRDMHttpClient;
         private readonly IDemoService _xxxService;
 
-        public DemoController(ILogger<DemoController> logger,
+        public DemoController(ILogger<DemoController> logger, SRDMHttpClient sRDMHttpClient,
             IDemoService xxxService) : base(logger)
         {
             _logger = logger;
+            _sRDMHttpClient = sRDMHttpClient;
             _xxxService = xxxService;
         }
 
@@ -32,6 +36,11 @@ namespace PwC.CRM.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> GetXxxs([FromBody] XxxRequestDto parameter)
         {
+            var response = await _sRDMHttpClient.PostAsync<CommonResponseDto>("getxxx", new
+            {
+                param1 = "",
+                param2 = ""
+            });
             _logger.LogInformation("»’÷æƒ⁄»›");
             var res = await _xxxService.GetBusinessunit(parameter);
             return Ok(res);
