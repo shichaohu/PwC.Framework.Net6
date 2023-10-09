@@ -205,7 +205,8 @@ builder.Services.Configure<TelemetryConfiguration>(x =>
 ### 4.效果图
 ![效果图1](image.png)
 ![效果图2](image-1.png)
-![---](resource/applicationInsights_01.pngimage.png)
+![效果图1](resource/applicationInsights_01.pngimage.png)
+![效果图2](resource/applicationInsights_02.pngimage-1.png)
 </details>
 
 ## 四、CRMClients
