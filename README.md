@@ -1,33 +1,32 @@
 
 # webapi 基础框架设计文档
-[TOC]
 - [webapi 基础框架设计文档](#webapi-基础框架设计文档)
   - [基本信息](#基本信息)
   - [一、鉴权](#一鉴权)
-    - [1、配置文件 appsetting.json](#1配置文件-appsettingjson)
-    - [2、代码开启 program.cs](#2代码开启-programcs)
-    - [3、Jwt 获取token](#3jwt-获取token)
-    - [4、请求示例](#4请求示例)
-    - [5、Dataverse 表](#5dataverse-表)
+    - [1.1、配置文件 appsetting.json](#11配置文件-appsettingjson)
+    - [1.2、代码开启 program.cs](#12代码开启-programcs)
+    - [1.3、Jwt 获取token](#13jwt-获取token)
+    - [1.4、请求示例](#14请求示例)
+    - [1.5、Dataverse 表](#15dataverse-表)
   - [二、设置文件上传大小](#二设置文件上传大小)
-    - [1. 说明](#1-说明)
-    - [2 .net 6代码](#2-net-6代码)
-    - [3. IIS Web.config 配置](#3-iis-webconfig-配置)
+    - [2.1. 说明](#21-说明)
+    - [2.2 .net 6代码](#22-net-6代码)
+    - [2.3. IIS Web.config 配置](#23-iis-webconfig-配置)
   - [三、Application Insights](#三application-insights)
-    - [1. 说明](#1-说明-1)
-    - [2. 代码开启program.cs](#2-代码开启programcs)
-    - [3. 配置文件appsettings.json](#3-配置文件appsettingsjson)
-    - [4.效果图](#4效果图)
+    - [3.1. 说明](#31-说明)
+    - [3.2. 代码开启program.cs](#32-代码开启programcs)
+    - [3.3. 配置文件appsettings.json](#33-配置文件appsettingsjson)
+    - [3.4.效果图](#34效果图)
   - [四、CRMClients](#四crmclients)
-    - [1. 说明](#1-说明-2)
+    - [4.1. 说明](#41-说明)
       - [CRMClients操作Dataverse的2中方式](#crmclients操作dataverse的2中方式)
-    - [2. 代码开启program.cs](#2-代码开启programcs-1)
-    - [3. 配置文件appsettings.json](#3-配置文件appsettingsjson-1)
-    - [4、CRM多环境接口路由](#4crm多环境接口路由)
-      - [4.1.统一标记说明](#41统一标记说明)
-      - [4.2.配置文件appsetting.json](#42配置文件appsettingjson)
-      - [4.3.Demo：单次请求指向单一服务器](#43demo单次请求指向单一服务器)
-    - [5、事务（TransactionServiceClient）](#5事务transactionserviceclient)
+    - [4.2. 代码开启program.cs](#42-代码开启programcs)
+    - [4.3. 配置文件appsettings.json](#43-配置文件appsettingsjson)
+    - [4.4、CRM多环境接口路由](#44crm多环境接口路由)
+      - [4.4.1.统一标记说明](#441统一标记说明)
+      - [4.4.2.配置文件appsetting.json](#442配置文件appsettingjson)
+      - [4.4.3.Demo：单次请求指向单一服务器](#443demo单次请求指向单一服务器)
+    - [4.5、事务（TransactionServiceClient）](#45事务transactionserviceclient)
   - [五、依赖注入](#五依赖注入)
     - [5.1 代码开启program.cs](#51-代码开启programcs)
   - [六、api接口入参模型校验](#六api接口入参模型校验)
@@ -71,7 +70,7 @@
 内网访问api时使用，减少系统设计复杂度
 ```
 
-### 1、配置文件 appsetting.json
+### 1.1、配置文件 appsetting.json
 
 ```json
 {
@@ -91,7 +90,7 @@
 }
 ```
 
-### 2、代码开启 program.cs
+### 1.2、代码开启 program.cs
 
 ``` C#
 using PwC.Crm.Share.Authentication;
@@ -104,7 +103,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 ```
 
-### 3、Jwt 获取token
+### 1.3、Jwt 获取token
 
 ```javascript
 post http://localhost:7108/api/Login/getToken
@@ -126,7 +125,7 @@ response body
 }
 ```
 
-### 4、请求示例
+### 1.4、请求示例
 ```javascript
 POST http://localhost:7108/api/LogOperations/QueryDBLogs
 header 
@@ -146,7 +145,7 @@ request body:
 }
 ```
 
-### 5、Dataverse 表
+### 1.5、Dataverse 表
 pwc_apiusers（pwc_name,pwc_clientid,pwc_clientsecret,pwc_scope,pwc_roles）
 ``` C#
 public class ApiUser
@@ -166,18 +165,18 @@ public class ApiUser
 <details> 
     <summary>设计</summary>
 
-### 1. 说明
+### 2.1. 说明
 ```
 .net 6 默认上传文件大小限制是30M
 IIS 默认上传文件大小限制是30M
 ```
-### 2 .net 6代码
+### 2.2 .net 6代码
 ```C#
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.UseFileUpload(builder.WebHost);
 
 ```
-### 3. IIS Web.config 配置
+### 2.3. IIS Web.config 配置
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
@@ -214,7 +213,7 @@ builder.Services.UseFileUpload(builder.WebHost);
 <details> 
     <summary>设计</summary>
 
-### 1. 说明
+### 3.1. 说明
 
 [Application Insights 概述](https://learn.microsoft.com/zh-cn/azure/azure-monitor/app/app-insights-overview?tabs=net)
 
@@ -225,7 +224,7 @@ Application Insights是微软基于Azure平台所提供的一个应用程序性�
  其中包含强大的分析工具来帮助诊断问题，了解用户在应用中实际执行了哪些操作。
  同时也对js/java/python等之类非微软家的产品它也提供支持。
 ```
-### 2. 代码开启program.cs
+### 3.2. 代码开启program.cs
 ```C#
 var builder = WebApplication.CreateBuilder(args);
 
@@ -236,7 +235,7 @@ builder.Services.Configure<TelemetryConfiguration>(x =>
 );
 
 ```
-### 3. 配置文件appsettings.json
+### 3.3. 配置文件appsettings.json
 ```json
 {
   "ApplicationInsights": {
@@ -246,7 +245,7 @@ builder.Services.Configure<TelemetryConfiguration>(x =>
 }
 
 ```
-### 4.效果图
+### 3.4.效果图
 ![效果图1](image.png)
 ![效果图2](image-1.png)
 ![效果图1](resource/applicationInsights_01.png)
@@ -257,37 +256,37 @@ builder.Services.Configure<TelemetryConfiguration>(x =>
 <details> 
     <summary>设计（基础功能）</summary>
 
-### 1. 说明
+### 4.1. 说明
 #### CRMClients操作Dataverse的2中方式
 - 方式1：IODataHttpClient
   - 底层实现：http请求
 - 方式2：TransactionServiceClient
   - 底层实现：基于连接(wcf方式)，支持事务
-### 2. 代码开启program.cs
+### 4.2. 代码开启program.cs
 ```C#
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCRMClients(builder.Configuration);
 ```
-### 3. 配置文件appsettings.json
+### 4.3. 配置文件appsettings.json
 ```json
 同下面(4、CRM多环境接口路由)的第4.2点
 ```
 </details>
 
-### 4、CRM多环境接口路由
+### 4.4、CRM多环境接口路由
 <details> 
     <summary>设计</summary>
 
 ```
 多环境路由：将不同的请求的数据读/写至不同的Dataverse
 ```
-#### 4.1.统一标记说明
+#### 4.4.1.统一标记说明
 
 HK=香港，US=北美，SG=新加坡
 
-#### 4.2.配置文件appsetting.json
+#### 4.4.2.配置文件appsetting.json
 
 ```json
 "Crm": {
@@ -318,7 +317,7 @@ HK=香港，US=北美，SG=新加坡
   }
 ```
 
-#### 4.3.Demo：单次请求指向单一服务器
+#### 4.4.3.Demo：单次请求指向单一服务器
 
 - ##### http header添加标记
 
@@ -367,7 +366,7 @@ public class DemoService : BaseService, IDemoService
 ```
 </details>
 
-### 5、事务（TransactionServiceClient）
+### 4.5、事务（TransactionServiceClient）
 
 <details> 
     <summary>设计</summary>
