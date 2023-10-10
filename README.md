@@ -263,9 +263,6 @@ builder.Services.Configure<TelemetryConfiguration>(x =>
 </details>
 
 ## 四、CRMClients
-<details> 
-    <summary>展开设计（基础功能）</summary>
-
 ### 4.1. 说明
 #### CRMClients操作Dataverse的2中方式
 - 方式1：IODataHttpClient
@@ -283,7 +280,6 @@ builder.Services.AddCRMClients(builder.Configuration);
 ```json
 同下面(4、CRM多环境接口路由)的第4.2点
 ```
-</details>
 
 ### 4.4、CRM多环境接口路由
 <details> 
@@ -649,10 +645,11 @@ public class ValuesController : BaseController
 
 ## 十、系统日志
 
+### 10.1说明
+
 <details> 
     <summary>展开设计</summary>
 
-### 10.1说明
 - 文件日志
   - 默认情况下写日志文件
   - 文件名按天滚动，文件夹名称为日期加小时，
@@ -665,8 +662,11 @@ public class ValuesController : BaseController
 - 其他持久化方式
   - 如SqlServer，MongoDB， Elasticsearch
   - 尚未实现，可扩展
+</details> 
 
 ### 10.2、代码
+<details> 
+    <summary>展开设计</summary>
 
 #### a、开启代码
 
@@ -741,10 +741,12 @@ public class ValuesController : BaseController
   
   ```
   
-  
+</details> 
 
 ### 10.3、查询
-
+<details> 
+    <summary>展开设计</summary>
+    
 * #### 获取token
   
   ```javascript
