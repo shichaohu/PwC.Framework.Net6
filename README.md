@@ -44,10 +44,15 @@
       - [9.1.2、命名式使用方式](#912命名式使用方式)
       - [9.1.3、类型化使用方式（当前框架使用此种方式）](#913类型化使用方式当前框架使用此种方式)
   - [十、系统日志](#十系统日志)
-    - [10.1、代码](#101代码)
+    - [10.1说明](#101说明)
+    - [10.2、代码](#102代码)
       - [a、开启代码](#a开启代码)
       - [b、代码使用](#b代码使用)
-    - [10.2、查询](#102查询)
+    - [10.3、查询](#103查询)
+  - [十一、部署](#十一部署)
+    - [10.1.IIS部署](#101iis部署)
+    - [10.2.Windows Servers 部署](#102windows-servers-部署)
+    - [10.3.Docker部署](#103docker部署)
 
 ## 基本信息
 ### 框架版本
@@ -647,7 +652,21 @@ public class ValuesController : BaseController
 <details> 
     <summary>展开设计</summary>
 
-### 10.1、代码
+### 10.1说明
+- 文件日志
+  - 默认情况下写日志文件
+  - 文件名按天滚动，文件夹名称为日期加小时，
+  - 单个文件最大10M，超过10M后另起一个新文件，如20230812.log,20230812_001.log
+  - dubug及以上的日志级别才会写日志
+- MySql日志
+  - 需要手动开启
+  - 程序启动自动生成日志表
+  - 日志表按照周数分表，如logs_dev_36（dev环境第36周的日志表）
+- 其他持久化方式
+  - 如SqlServer，MongoDB， Elasticsearch
+  - 尚未实现，可扩展
+
+### 10.2、代码
 
 #### a、开启代码
 
@@ -724,7 +743,7 @@ public class ValuesController : BaseController
   
   
 
-### 10.2、查询
+### 10.3、查询
 
 * #### 获取token
   
@@ -818,3 +837,103 @@ public class ValuesController : BaseController
   
 </details> 
 
+## 十一、部署
+
+<details> 
+    <summary>展开设计</summary>
+
+### 10.1.IIS部署
+- 根据实际情况更改ASPNETCORE_ENVIRONMENT的值，如：PRD表示生产环境，会自动去读appsettings.PRD.json配置文件的内容
+- web.config
+  ```xml
+  <?xml version="1.0" encoding="utf-8"?>
+  <configuration>
+    <location path="." inheritInChildApplications="false">
+      <system.webServer>
+        <handlers>
+          <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+        </handlers>
+        <aspNetCore processPath="dotnet" arguments=".\APV.CRM.Service.Api.dll" stdoutLogEnabled="false" stdoutLogFile=".\logs\stdout" hostingModel="inprocess">
+          <environmentVariables>
+            <environmentVariable name="ASPNETCORE_ENVIRONMENT" value="PRD" />
+          </environmentVariables>
+        </aspNetCore>
+        <serverRuntime uploadReadAheadSize="2147483647" />
+      </system.webServer>
+      <system.web>
+        <httpRuntime maxRequestLength="2147483647" useFullyQualifiedRedirectUrl="true" executionTimeout="3600" />
+      </system.web>
+      <system.webServer>
+        <security>
+          <requestFiltering>
+            <requestLimits maxAllowedContentLength="2147483647" />
+          </requestFiltering>
+        </security>
+      </system.webServer>
+    </location>
+  </configuration>
+  ```
+### 10.2.Windows Servers 部署
+- 发布和IIS一样，但无需web.config文件，且需要在program.cs中支持kerstrel，kerstrel有如下实现方式
+  - 编码方式 
+    ```C#
+    webBuilder.UseKestrel(options =>
+    {
+        // TCP 8001
+        options.ListenLocalhost(8001, builder =>
+        {
+            builder.UseConnectionHandler<MyEchoConnectionHandler>();
+        });
+
+        // HTTP 5000
+        options.ListenLocalhost(5000);
+
+        // HTTPS 5001
+        options.ListenLocalhost(5001, builder =>
+        {
+            builder.UseHttps();
+        });
+    });
+    ```
+  - UseUrls方式
+    ```C#
+    webBuilder.UseUrls("http://localhost:5000;http://localhost:5001")
+    ```
+  - 配置文件方式
+    ```C#
+    {
+      "urls": "http://*:5000;"
+    }
+    ```
+- 设置windows服务开机启动
+### 10.3.Docker部署
+- 需要在program中支持kerstrel（同10.2.Windows Servers 部署）
+- 制作基础镜像（hub.pwc.cn/dotnet/aspnet:6.0, .net技术栈公用）
+- 添加docker file,继承基础镜像，将环境变量ASPNETCORE_ENVIRONMENT传入dot net run 命令行的environment参数，并推送至代码仓库。docker file 如下：
+  
+  ```Shell
+  FROM hub.pwc.cn/dotnet/aspnet:6.0 AS base
+  WORKDIR /app
+  EXPOSE 80
+  FROM hub.pwc.cn/dotnet/sdk:6.0 AS build
+  #ARG BUILD_ENV
+  WORKDIR /src
+  COPY . .
+  RUN dotnet tool install --tool-path /tools dotnet-dump
+  RUN dotnet restore "PwC.CRM.Api/PwC.CRM.Api.csproj" -s http://nexus.pwc.cn/repository/nuget-group/index.json
+  WORKDIR "/src/PwC.CRM.Api"
+  #RUN dotnet build "PwC.CRM.Api.csproj" -c ${BUILD_ENV:-Debug} -o /app/build
+  FROM build AS publish
+  ARG BUILD_ENV
+  RUN dotnet publish "PwC.CRM.Api.csproj" -c ${BUILD_ENV:-Debug} --no-restore -o /app/publish
+  FROM base AS final
+  WORKDIR /tools
+  COPY --from=build /tools .
+  WORKDIR /app
+  COPY --from=publish /app/publish .
+  #ENTRYPOINT dotnet PwC.CRM.Api.dll --environment=${BUILD_ENV:-Debug} --urls=http://*:${SERVER_PORT:-80} --ip=${SERVER_IP} --port=${SERVER_PORT:-80}/
+  ```
+- 发布服务器去代码仓库拉去源代码，执行docker file，生成程序镜像，并推送至镜像仓库
+- 部署节点服务器拉去程序镜像，运行镜像。（docke run img，或者用docker-compose.yml，或者用K8S容器编排）
+
+</details>
