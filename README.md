@@ -1,7 +1,9 @@
 
-# webapi 基础框架设计文档
-- [webapi 基础框架设计文档](#webapi-基础框架设计文档)
+# webapi 基础框架&设计文档
+- [webapi 基础框架\&设计文档](#webapi-基础框架设计文档)
   - [基本信息](#基本信息)
+    - [框架版本](#框架版本)
+    - [源码](#源码)
   - [一、鉴权](#一鉴权)
     - [1.1、配置文件 appsetting.json](#11配置文件-appsettingjson)
     - [1.2、代码开启 program.cs](#12代码开启-programcs)
@@ -48,11 +50,11 @@
     - [10.2、查询](#102查询)
 
 ## 基本信息
-- 框架版本
+### 框架版本
   ```xml
   <TargetFramework>net6.0</TargetFramework>
   ```
-- 源码
+### 源码
   ```
   github: https://github.com/shichaohu/PwC.Framework.Net6
   gitee: https://gitee.com/TheCustodian/PwC.Framework.Net6
@@ -61,7 +63,7 @@
 - 架构图
 ## 一、鉴权
 <details> 
-    <summary>设计</summary>
+    <summary>展开设计</summary>
 
   **鉴权方式**
   - Jwt
@@ -166,7 +168,7 @@ public class ApiUser
 
 ## 二、设置文件上传大小
 <details> 
-    <summary>设计</summary>
+    <summary>展开设计</summary>
 
 ### 2.1. 说明
 ```
@@ -214,7 +216,7 @@ builder.Services.UseFileUpload(builder.WebHost);
 
 ## 三、Application Insights
 <details> 
-    <summary>设计</summary>
+    <summary>展开设计</summary>
 
 ### 3.1. 说明
 
@@ -257,7 +259,7 @@ builder.Services.Configure<TelemetryConfiguration>(x =>
 
 ## 四、CRMClients
 <details> 
-    <summary>设计（基础功能）</summary>
+    <summary>展开设计（基础功能）</summary>
 
 ### 4.1. 说明
 #### CRMClients操作Dataverse的2中方式
@@ -280,7 +282,7 @@ builder.Services.AddCRMClients(builder.Configuration);
 
 ### 4.4、CRM多环境接口路由
 <details> 
-    <summary>设计</summary>
+    <summary>展开设计</summary>
 
 ```
 多环境路由：将不同的请求的数据读/写至不同的Dataverse
@@ -372,7 +374,7 @@ public class DemoService : BaseService, IDemoService
 ### 4.5、事务（TransactionServiceClient）
 
 <details> 
-    <summary>设计</summary>
+    <summary>展开设计</summary>
 
 - 核心代码：using (var tranSvcClient = TransactionServiceClient){}
 - 提交事务，如果需要读取事务提交结果，则使用“var tranResponse=tranSvcClient.CommitTransaction();”显示提交，并获取结果
@@ -518,7 +520,7 @@ public class DemoController : BaseController<DemoController>
 ## 九、自定义HttpClient（程序内发起http请求）
 
 <details> 
-    <summary>设计</summary>
+    <summary>展开设计</summary>
 
 ### 9.1 .net6 中HttpClient的3种使用方式
 #### 9.1.1、直接使用方式
@@ -643,7 +645,7 @@ public class ValuesController : BaseController
 ## 十、系统日志
 
 <details> 
-    <summary>设计</summary>
+    <summary>展开设计</summary>
 
 ### 10.1、代码
 
