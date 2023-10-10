@@ -45,6 +45,8 @@ public static class SwaggerExtensions
 
             options.CustomSchemaIds(type => type.FullName);
             options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "PwC.CRM.Api.xml"), true);
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "PwC.CRM.Service.xml"), true);
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "PwC.CRM.Share.xml"), true);
             #region 分组
             //遍历ApiGroupNames所有枚举值生成接口文档，Skip(1)是因为Enum第一个FieldInfo是内置的一个Int值
             typeof(ApiGroupNames).GetFields().Skip(1).ToList().ForEach(f =>
