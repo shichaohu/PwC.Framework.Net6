@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title></title>
+
+    <link rel="stylesheet" href="/WebResources/pwc_/common/css/showlog.css">
+    <link rel="stylesheet" href="/WebResources/pwc_/common/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/WebResources/pwc_/common/css/bootstrap-datetimepicker.min.css" />
+
+    <script type="text/javascript" src="/WebResources/pwc_/common/js/jquery-3.7.0.min.js"></script>
+    <script type="text/javascript" src="/WebResources/pwc_/common/js/GlobalUtil.js"></script>
+    <script type="text/javascript" src="/WebResources/pwc_/common/js/Tools.js"></script>
+    <script type="text/javascript" src="/WebResources/pwc_/common/js/CallCrmApi.js"></script>
+    <script type="text/javascript" src="/WebResources/pwc_/common/js/showlog.js"></script>
+
+    <script type="text/javascript" src="/WebResources/pwc_/common/js/bootstrap-datetimepicker.min.js"></script>
+
+    <!--<link rel="stylesheet" href="../css/showlog.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/bootstrap-datetimepicker.min.css" />
+
+    <script type="text/javascript" src="../js/jquery-3.7.0.min.js"></script>
+    <script type="text/javascript" src="../js/GlobalUtil.js"></script>
+    <script type="text/javascript" src="../js/Tools.js"></script>
+    <script type="text/javascript" src="../js/CallCrmApi.js"></script>
+    <script type="text/javascript" src="../js/showlog.js"></script>
+
+    <script type="text/javascript" src="../js/bootstrap-datetimepicker.min.js"></script>-->
+
+
+</head>
+<body>
+    <div id="loading" class="loading"></div>
+    <div id="container">
+        <table>
+            <tr>
+                <td>接口名称:</td>
+                <!--<td><input id="HttpPath" type="text" maxlength="100" /></td>-->
+                <td colspan="3"><select id="HttpPath"></select></td>
+                <td>HttpRequestId:</td>
+                <td><input id="HttpRequestId" type="text" maxlength="50" /></td>
+                <td>日志级别:</td>
+                <td>
+                    <select id="Level">
+                        <option value="">All</option>
+                        <option value="Information">Information</option>
+                        <option value="Warning">Warning</option>
+                        <option value="Error">Error</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>开始时间:</td>
+                <td><input id="TimeStart" type="text" maxlength="50" /></td>
+                <td>结束时间:</td>
+                <td><input id="TimeEnd" type="text" maxlength="50" /></td>
+                <td>日志内容:</td>
+                <td><input id="Message" type="text" maxlength="100" /></td>
+                <td>最大条数:</td>
+                <td><input id="Limit" type="number" value="20" maxlength="5" /></td>
+            </tr>
+        </table>
+        <div id="head">
+            <button type="button" id="btnSubmit" class="submit" onclick="javascript:pwclog.loadData();">
+                <span>查询</span>
+            </button>
+        </div>
+        <div>
+            <table class="log-result">
+                <thead>
+                    <tr>
+                        <td style="min-width:80px">Id</td>
+                        <!--<td style="min-width:250px">HttpHost</td>-->
+                        <td style="min-width: 150px">访问者ip</td>
+                        <!--<td style="min-width:200px">HttpXForwardedFor</td>-->
+                        <td style="min-width: 300px">接口名称</td>
+                        <td style="min-width: 300px">接口地址</td>
+                        <td style="min-width: 350px">HttpRequestId</td>
+                        <!--<td style="min-width:100px">SourceContext</td>-->
+                        <td style="min-width: 200px">日志写入时间</td>
+                        <td style="min-width: 120px">日志级别</td>
+                        <td style="min-width: 500px">日志内容</td>
+                    </tr>
+                </thead>
+                <tbody id="logBody">
+                    <!--<tr>
+                        <td>Id</td>
+                        <td>HttpHost</td>
+                        <td>HttpRemoteAddress</td>
+                        <td>HttpXForwardedFor</td>
+                        <td>HttpPath</td>
+                        <td>HttpRequestId</td>
+                        <td>SourceContext</td>
+                        <td>Timestamp</td>
+                        <td>Level</td>
+                        <td>Message</td>
+                    </tr>-->
+                </tbody>
+            </table>
+        </div>
+        <div id="msg"></div>
+        <div id="body">
+            <div id="item"></div>
+            <div id="items"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+                //文档地址：http://www.h-ui.net/lib/Bootstrap.datetimepicker.js.shtml
+                $('#TimeStart').datetimepicker({
+                    language: 'zh-CN', //显示中文
+                    format: 'yyyy-mm-dd hh:ii:00', //显示格式
+                    autoclose: true, //选中自动关闭
+                    todayBtn: true, //显示今日按钮
+                    todayHighlight: true, // 今日高亮显示
+                    weekStart: 1, //一周从哪一天开始。0（星期日）到6（星期六）
+                    startDate: "2020-1-1", //日期选取的起始时间
+                    minView: "0", // 日期时间选择器所能够提供的最精确的时间选择视图。0 小时 | 1 天 | 2 月 | 3 年 | 4 十年
+                    daysOfWeekDisabled: '0', // 哪天不可选 0（星期日）到6（星期六）
+                    endDate: new Date(), //日期选取的截止时间，因为入职日期最多填写到今天，所以可以直接用new Date()，表示当天
+
+                })
+
+                $('#TimeEnd').datetimepicker({
+                    language: 'zh-CN', //显示中文
+                    format: 'yyyy-mm-dd hh:ii:00', //显示格式
+                    autoclose: true, //选中自动关闭
+                    todayBtn: true, //显示今日按钮
+                    todayHighlight: true, // 今日高亮显示
+                    weekStart: 1, //一周从哪一天开始。0（星期日）到6（星期六）
+                    startDate: "2020-1-1", //日期选取的起始时间
+                    minView: "0", // 日期时间选择器所能够提供的最精确的时间选择视图。0 小时 | 1 天 | 2 月 | 3 年 | 4 十年
+                    daysOfWeekDisabled: '0', // 哪天不可选 0（星期日）到6（星期六）
+                    endDate: new Date(), //日期选取的截止时间，因为入职日期最多填写到今天，所以可以直接用new Date()，表示当天
+                })
+
+                pwclog.loadApiSwaggerDocs();
+            }
+            pwclog.hideLoading();
+        }
+    </script>
+</body>
+</html>

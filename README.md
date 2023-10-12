@@ -2,26 +2,28 @@
 # WebApi 基础框架&设计文档
 - [WebApi 基础框架\&设计文档](#webapi-基础框架设计文档)
   - [基本信息](#基本信息)
+    - [使用场景](#使用场景)
     - [框架版本](#框架版本)
     - [源码](#源码)
   - [一、鉴权](#一鉴权)
     - [1.1、配置文件 appsetting.json](#11配置文件-appsettingjson)
     - [1.2、代码开启 program.cs](#12代码开启-programcs)
-    - [1.3、Jwt 获取token](#13jwt-获取token)
-    - [1.4、请求示例](#14请求示例)
+    - [1.3、示例：Jwt 获取token](#13示例jwt-获取token)
+    - [1.4、示例：请求接口“查询数据库日志”](#14示例请求接口查询数据库日志)
     - [1.5、Dataverse 表](#15dataverse-表)
   - [二、设置文件上传大小](#二设置文件上传大小)
-    - [2.1. 说明](#21-说明)
+    - [2.1. 功能描述](#21-功能描述)
     - [2.2 .net 6代码](#22-net-6代码)
     - [2.3. IIS Web.config 配置](#23-iis-webconfig-配置)
   - [三、Application Insights](#三application-insights)
-    - [3.1. 说明](#31-说明)
+    - [3.1. 功能描述](#31-功能描述)
     - [3.2. 代码开启program.cs](#32-代码开启programcs)
     - [3.3. 配置文件appsettings.json](#33-配置文件appsettingsjson)
     - [3.4.效果图](#34效果图)
   - [四、CRMClients](#四crmclients)
-    - [4.1. 说明](#41-说明)
+    - [4.1. 功能描述](#41-功能描述)
       - [CRMClients操作Dataverse的2中方式](#crmclients操作dataverse的2中方式)
+      - [使用方式](#使用方式)
     - [4.2. 代码开启program.cs](#42-代码开启programcs)
     - [4.3. 配置文件appsettings.json](#43-配置文件appsettingsjson)
     - [4.4、CRM多环境接口路由](#44crm多环境接口路由)
@@ -30,31 +32,44 @@
       - [4.4.3.Demo：单次请求指向单一服务器](#443demo单次请求指向单一服务器)
     - [4.5、事务（TransactionServiceClient）](#45事务transactionserviceclient)
   - [五、依赖注入](#五依赖注入)
+      - [5.1 功能描述](#51-功能描述)
     - [5.1 代码开启program.cs](#51-代码开启programcs)
   - [六、api接口入参模型校验](#六api接口入参模型校验)
+      - [6.1 功能描述](#61-功能描述)
     - [6.1 代码开启program.cs](#61-代码开启programcs)
   - [七、api跨域支持](#七api跨域支持)
     - [7.1 代码开启program.cs](#71-代码开启programcs)
   - [八、Swagger文档](#八swagger文档)
-    - [8.1 代码开启program.cs](#81-代码开启programcs)
-    - [8.2 接口分组](#82-接口分组)
+      - [8.1 功能描述](#81-功能描述)
+    - [8.2 代码开启program.cs](#82-代码开启programcs)
+    - [8.3 接口分组](#83-接口分组)
   - [九、自定义HttpClient（程序内发起http请求）](#九自定义httpclient程序内发起http请求)
-    - [9.1 .net6 中HttpClient的3种使用方式](#91-net6-中httpclient的3种使用方式)
-      - [9.1.1、直接使用方式](#911直接使用方式)
-      - [9.1.2、命名式使用方式](#912命名式使用方式)
-      - [9.1.3、类型化使用方式（当前框架使用此种方式）](#913类型化使用方式当前框架使用此种方式)
+      - [9.1 功能描述](#91-功能描述)
+    - [9.2 .net6中HttpClient的3种使用方式](#92-net6中httpclient的3种使用方式)
+      - [9.2.1、直接使用方式](#921直接使用方式)
+      - [9.2.2、命名式使用方式](#922命名式使用方式)
+      - [9.2.3、类型化使用方式](#923类型化使用方式)
   - [十、系统日志](#十系统日志)
-    - [10.1说明](#101说明)
+    - [10.1功能描述](#101功能描述)
     - [10.2、代码](#102代码)
       - [a、开启代码](#a开启代码)
       - [b、代码使用](#b代码使用)
     - [10.3、查询](#103查询)
+    - [10.4 html+JS查询数据库日志](#104-htmljs查询数据库日志)
+      - [10.4.1 功能说明](#1041-功能说明)
   - [十一、部署](#十一部署)
-    - [10.1.IIS部署](#101iis部署)
-    - [10.2.Windows Servers 部署](#102windows-servers-部署)
-    - [10.3.Docker部署](#103docker部署)
+    - [11.1 部署架构](#111-部署架构)
+    - [11.2 IIS部署](#112-iis部署)
+    - [11.3 Windows Servers 部署](#113-windows-servers-部署)
+    - [11.4 Docker部署](#114-docker部署)
 
 ## 基本信息
+### 使用场景
+- 场景一：基于.net 6.0框架开发WebApi
+  - 此种场景需要注释掉下文中第四点（CRMClients）的功能
+- 场景而：D365与客户内部系统通过WebApi（代理角色）实现交互
+  - D365部署在外网，而客户内部系统只能内网访问 
+  - 交互过程中存在复杂的逻辑
 ### 框架版本
   ```xml
   <TargetFramework>net6.0</TargetFramework>
@@ -72,13 +87,24 @@
 
   **鉴权方式**
   - Jwt
-  ```
-  外网访问api时使用，加强系统访问的安全性
-  ```
+    - 使用场景：外网访问webapi时，强制使用
+      - 加强系统访问的安全性
+    - 使用方式
+      - 1、调用任意接口前，先通过"/api/Login/getToken"接口获取access_token，access_token有效时间为24小时，可在配置文件中设置，有效时间可通过access_token中的expires_on（UTC时间戳，精确到秒）计算出
+      - 2、调用接口时，在header 中传入参数
+        ```C#
+        Authorization:Bearer+空格+access_token
+        ```
   - Basic
-```
-内网访问api时使用，减少系统设计复杂度
-```
+    - 使用场景：内部系统访问
+      - 减少系统设计复杂度
+      - 但相当于明文传输账号和密码
+    -使用方式
+      - 调用接口时，在header 中传入参数
+        ```C#
+        Authorization:Basic+空格+base64密文
+        其中，base64密文=appsetting.json中的Jwt.Basic下的Account和Password按照bast64编码(Account+":"+Password)计算出，详见1.1、配置文件 appsetting.json
+        ```
 
 ### 1.1、配置文件 appsetting.json
 
@@ -112,8 +138,10 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 ```
+- $\color{#dd0000} {builder.Services.AddAuthentication方法是自定义实现的，具体实现请参阅源代码}$
 
-### 1.3、Jwt 获取token
+
+### 1.3、示例：Jwt 获取token
 
 ```javascript
 post http://localhost:7108/api/Login/getToken
@@ -135,7 +163,7 @@ response body
 }
 ```
 
-### 1.4、请求示例
+### 1.4、示例：请求接口“查询数据库日志”
 ```javascript
 POST http://localhost:7108/api/LogOperations/QueryDBLogs
 header 
@@ -157,17 +185,19 @@ request body:
 
 ### 1.5、Dataverse 表
 pwc_apiusers（pwc_name,pwc_clientid,pwc_clientsecret,pwc_scope,pwc_roles）
-``` C#
-public class ApiUser
-{
-    public string? pwc_name { get; set; }
-    public string? pwc_clientid { get; set; }
-    public string? pwc_clientsecret { get; set; }
-    public string? pwc_scope { get; set; }
-    public string? pwc_roles { get; set; }
+- 用于存储Jwt方式鉴权场景中的接口“获取token”的请求参数
+- 表结构如下：
+  ``` C#
+  public class ApiUser
+  {
+      public string? pwc_name { get; set; }
+      public string? pwc_clientid { get; set; }
+      public string? pwc_clientsecret { get; set; }
+      public string? pwc_scope { get; set; }
+      public string? pwc_roles { get; set; }
 
-}
-```
+  }
+  ```
 
 </details>
 
@@ -175,17 +205,17 @@ public class ApiUser
 <details> 
     <summary>展开设计</summary>
 
-### 2.1. 说明
-```
-.net 6 默认上传文件大小限制是30M
-IIS 默认上传文件大小限制是30M
-```
+### 2.1. 功能描述
+- .net 6 默认上传文件大小限制是30M
+- IIS 默认上传文件大小限制是30M
+- 如果存在上传大于30M文件的接口，必须配置此功能
 ### 2.2 .net 6代码
 ```C#
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.UseFileUpload(builder.WebHost);
-
 ```
+-  $\color{#dd0000} {builder.Services.UseFileUpload方法是自定义实现的，具体实现请参阅源代码}$
+  
 ### 2.3. IIS Web.config 配置
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -223,17 +253,28 @@ builder.Services.UseFileUpload(builder.WebHost);
 <details> 
     <summary>展开设计</summary>
 
-### 3.1. 说明
+### 3.1. 功能描述
 
 [Application Insights 概述](https://learn.microsoft.com/zh-cn/azure/azure-monitor/app/app-insights-overview?tabs=net)
 
 [github上的topic]( https://github.com/topics/application-insights)
 ```
 Application Insights是微软基于Azure平台所提供的一个应用程序性能管理 (APM) 服务(类似Skywalking)。
- 使用它可以监视实时 Web 应用程序，自动检测性能异常。 
- 其中包含强大的分析工具来帮助诊断问题，了解用户在应用中实际执行了哪些操作。
- 同时也对js/java/python等之类非微软家的产品它也提供支持。
+使用它可以监视实时 Web 应用程序，自动检测性能异常。 
+其中包含强大的分析工具来帮助诊断问题，了解用户在应用中实际执行了哪些操作。
+同时也对js/java/python等之类非微软家的产品它也提供支持。
 ```
+- 支持语言
+  - ASP.NET、Java、Node.js、Python、ASP.NET Core
+- 功能
+  - 收集描述应用程序活动与运行状况的指标
+  - 收集描述应用程序的遥测数据外，还可以使用 Application Insights 
+  - 收集和存储应用程序跟踪日志记录数据
+  - 实时指标：实时观察部署的应用程序的活动，而不影响主机环境。
+  - 可用性：也称为综合事务监视。 探测应用程序的外部终结点，以测试一段时间内的整体可用性和响应能力。
+  - GitHub 或 Azure DevOps 集成：在 Application Insights 数据上下文中创建 GitHub 或 Azure DevOps 工作项。
+  - 使用情况：了解哪些功能受用户欢迎，以及用户如何与应用程序交互和使用应用程序。
+  - 智能检测：通过主动遥测分析来自动检测故障和异常。
 ### 3.2. 代码开启program.cs
 ```C#
 var builder = WebApplication.CreateBuilder(args);
@@ -245,6 +286,9 @@ builder.Services.Configure<TelemetryConfiguration>(x =>
 );
 
 ```
+
+-  $\color{#dd0000} {方法内部实现请参考阅读官方文档[Application Insights 概述]}$
+  
 ### 3.3. 配置文件appsettings.json
 ```json
 {
@@ -256,30 +300,53 @@ builder.Services.Configure<TelemetryConfiguration>(x =>
 
 ```
 ### 3.4.效果图
-![效果图1](image.png)
-![效果图2](image-1.png)
-![效果图1](resource/applicationInsights_01.png)
-![效果图2](resource/applicationInsights_02.png)
+![效果图1](resource/image/applicationInsights_01.png)
+![效果图2](resource/image/applicationInsights_02.png)
+![效果图3](resource/image/applicationInsights_03.png)
 </details>
 
 ## 四、CRMClients
-### 4.1. 说明
+### 4.1. 功能描述
+- CRMClients可以看作是仓储层，封装了操作数据库Dataverse的一些常用方法
 #### CRMClients操作Dataverse的2中方式
 - 方式1：IODataHttpClient
   - 底层实现：http请求
+  - 配置文件
+  ```json
+  "Crm": {
+      "Default": {
+        "resourceUrl": "https://vaporessodev.api.crm5.dynamics.com",
+        "clientId": "417b6275-c68d-4f9d-9f6f-45fa0e7de97a",
+        "clientSecret": "mac8Q~9-9dRnNEfi22IATM1G6PMrLMuxIZw.wbT8",
+        "tenantId": "3277c91b-811a-401a-b1a1-b769a05aefa7",
+        "tokenUrl": "login.windows.net"
+      }
+    }
+  ```
 - 方式2：TransactionServiceClient
   - 底层实现：基于连接(wcf方式)，支持事务
+  - 配置文件
+  ```json
+  "Crm": {
+      "Default": {
+        "connectionString": "connectionString"
+      }
+    }
+  ```
+#### 使用方式
+- 见 4.4.3.Demo：单次请求指向单一服务器
+- 见 4.5.1 Demo：在事务中CRUD
 ### 4.2. 代码开启program.cs
 ```C#
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCRMClients(builder.Configuration);
 ```
+-  $\color{#dd0000} {AddCRMClients方法是自定义实现的，具体实现请参阅源代码}$
+  
 ### 4.3. 配置文件appsettings.json
-```json
-同下面(4、CRM多环境接口路由)的第4.2点
-```
+- 见 4.4.2.配置文件appsetting.json (CRM多环境接口路由第4.2点)
+
 
 ### 4.4、CRM多环境接口路由
 <details> 
@@ -290,12 +357,20 @@ builder.Services.AddCRMClients(builder.Configuration);
 ```
 #### 4.4.1.统一标记说明
 
-HK=香港，US=北美，SG=新加坡
+Default=默认，HK=香港，US=北美
 
 #### 4.4.2.配置文件appsetting.json
 
 ```json
 "Crm": {
+    "Default": {
+      "resourceUrl": "https://vaporessosg.api.crm5.dynamics.com",
+      "clientId": "417b6275-c68d-4f9d-9f6f-45fa0e7de97a",
+      "clientSecret": "mac8Q~9-9dRnNEfi22IATM1G6PMrLMuxIZw.wbT8",
+      "tenantId": "3277c91b-811a-401a-b1a1-b769a05aefa7",
+      "connectionString": "connectionString",
+      "tokenUrl": "login.windows.net"
+    },
     "HK": {
       "resourceUrl": "https://vaporessodev.api.crm5.dynamics.com",
       "clientId": "417b6275-c68d-4f9d-9f6f-45fa0e7de97a",
@@ -306,14 +381,6 @@ HK=香港，US=北美，SG=新加坡
     },
     "US": {
       "resourceUrl": "https://vaporessosit.api.crm5.dynamics.com",
-      "clientId": "417b6275-c68d-4f9d-9f6f-45fa0e7de97a",
-      "clientSecret": "mac8Q~9-9dRnNEfi22IATM1G6PMrLMuxIZw.wbT8",
-      "tenantId": "3277c91b-811a-401a-b1a1-b769a05aefa7",
-      "connectionString": "connectionString",
-      "tokenUrl": "login.windows.net"
-    },
-    "SG": {
-      "resourceUrl": "https://vaporessosg.api.crm5.dynamics.com",
       "clientId": "417b6275-c68d-4f9d-9f6f-45fa0e7de97a",
       "clientSecret": "mac8Q~9-9dRnNEfi22IATM1G6PMrLMuxIZw.wbT8",
       "tenantId": "3277c91b-811a-401a-b1a1-b769a05aefa7",
@@ -380,8 +447,9 @@ public class DemoService : BaseService, IDemoService
 - 核心代码：using (var tranSvcClient = TransactionServiceClient){}
 - 提交事务，如果需要读取事务提交结果，则使用“var tranResponse=tranSvcClient.CommitTransaction();”显示提交，并获取结果
 - 如不关心提交结果，则忽略此行代码，代码会自动提交
+- TransactionServiceClient默认支功能“持多环境接口路由”
 
-- #### 代码示例
+- #### 4.5.1 Demo：在事务中CRUD
   ```C#
 
   public class DemoService : BaseService, IDemoService
@@ -461,19 +529,28 @@ public class DemoService : BaseService, IDemoService
 
 ## 五、依赖注入
 
+#### 5.1 功能描述
+- PwC.CRM.Service层中，所有需要自动依赖注入的接口对象，都必须实现接口 IDependency
+- 注入对象的生命周期全是：Scoped
+
 ### 5.1 代码开启program.cs
 ```C#
 var builder = WebApplication.CreateBuilder(args);
-//PwC.CRM.Service层中，所有需要自动依赖注入的接口对象，都必须实现接口 IDependency
 builder.Services.AddAutoDependency("PwC.CRM.Service");
 ```
+-  $\color{#dd0000} {AddAutoDependency方法是自定义实现的，具体实现请参阅源代码}$
 
 ## 六、api接口入参模型校验
+
+#### 6.1 功能描述
+- 用于请求路由至api控制器前做接口的请求参数校验，包括参数类型、参数必填、参数长度
+
 ### 6.1 代码开启program.cs
 ```C#
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddModelStateVrify();
 ```
+-  $\color{#dd0000} {AddModelStateVrify方法是自定义实现的，具体实现请参阅源代码}$
 ## 七、api跨域支持
 
 ### 7.1 代码开启program.cs
@@ -492,7 +569,13 @@ app.UseCors("CorsPolicy");
 ```
 ## 八、Swagger文档
 
-### 8.1 代码开启program.cs
+#### 8.1 功能描述
+- 支持Knife4UI（校Swagger更直观第展示接口信息）
+- 支持在线调试
+- 支持接口分组
+- 程序启动时默认展示Knife4UI的主页
+
+### 8.2 代码开启program.cs
 ```C#
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSwaggerDoc(builder.Configuration);
@@ -501,7 +584,9 @@ builder.Services.AddSwaggerDoc(builder.Configuration);
 var app = builder.Build();
 app.UseSwaggerUi(builder.Configuration, app.Environment);
 ```
-### 8.2 接口分组
+-  $\color{#dd0000} {AddSwaggerDoc方法和UseSwaggerUi方法是自定义实现的，具体实现请参阅源代码}$
+
+### 8.3 接口分组
 
 - 需在控制器上添加特性:ApiGroup
 
@@ -523,8 +608,13 @@ public class DemoController : BaseController<DemoController>
 <details> 
     <summary>展开设计</summary>
 
-### 9.1 .net6 中HttpClient的3种使用方式
-#### 9.1.1、直接使用方式
+#### 9.1 功能描述
+- HttpClient用于在程序内向外部系统发起http请求
+- 微软在.NET Core 2.1 开始引入的 HttpClientFactory 解决了HttpClient的所有痛点，包括HttpClient不能立即关闭连接、性能消耗严重等
+- HttpClientFactory解决了高并发情况下HttpClient频繁Dispose时，内存消耗严重的问题
+
+### 9.2 .net6中HttpClient的3种使用方式
+#### 9.2.1、直接使用方式
 ```C#
 builder.Services.AddHttpClient();
 
@@ -546,7 +636,7 @@ public class ValuesController:BaseController
 }
 ```
 
-#### 9.1.2、命名式使用方式
+#### 9.2.2、命名式使用方式
 ```C#
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient("github",
@@ -574,13 +664,17 @@ public class ValuesController : BaseController
     }
 }
 ```
-#### 9.1.3、类型化使用方式（当前框架使用此种方式）
-  - 代码开启program.cs
+#### 9.2.3、类型化使用方式
+  - 最简洁的使用方式，当前框架使用此种方式
+  - 请求开始前会将Request.Body写入日志
+  - 请求结束后会将Response.Body写入日志
+  
+  - a、代码开启program.cs
     ```C#
     var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddCustomerHttpClient(builder.Configuration);
     ```
-  - 构造器获取注入的 HttpClient
+  - b、构造器获取注入的 HttpClient
     ```C#
     [ApiController]
     [Route("api/[controller]/[action]")]
@@ -613,7 +707,7 @@ public class ValuesController : BaseController
 
     }
     ```
-  - SRDMHttpClient
+  - SRDMHttpClient的实现代码
     ```C#
     /// <summary>
     /// SRDM的HttpClient
@@ -645,23 +739,47 @@ public class ValuesController : BaseController
 
 ## 十、系统日志
 
-### 10.1说明
+### 10.1功能描述
 
 <details> 
     <summary>展开设计</summary>
+目前只支持日志两种持久化方式，文件和MySql
 
-- 文件日志
-  - 默认情况下写日志文件
-  - 文件名按天滚动，文件夹名称为日期加小时，
-  - 单个文件最大10M，超过10M后另起一个新文件，如20230812.log,20230812_001.log
   - dubug及以上的日志级别才会写日志
-- MySql日志
-  - 需要手动开启
-  - 程序启动自动生成日志表
-  - 日志表按照周数分表，如logs_dev_36（dev环境第36周的日志表）
-- 其他持久化方式
-  - 如SqlServer，MongoDB， Elasticsearch
-  - 尚未实现，可扩展
+  - 每条请求进入后会自动写3种日志：
+    - 请求的body内容（Request.Body）
+    - 本次请求所用时长，精确到毫秒
+    - 响应body内容（Response.Body）
+  - 忽略日志时，只需在controller或者action上加上特性 SerilogIgnore
+    - 忽略后仍然会写一下两种日志
+      - 本次请求所用时长，精确到毫秒
+      - 错误日志
+  
+    ```C#
+    [ApiController]
+    [SerilogIgnore]
+    public class DemoController : BaseController<DemoController>
+    {
+        [HttpPost]
+        public async Task<IActionResult> GetXxxs(XxxRequestDto parameter)
+        {
+            return Ok(res);
+        }
+
+    }
+    ```
+
+  - 文件日志
+    - 默认情况下将日志写入文件
+    - 文件名按天滚动，文件夹名称为日期加小时，
+    - 单个文件最大10M，超过10M后另起一个新文件，如20230812.log,20230812_001.log
+  - MySql日志
+    - 需要手动开启
+    - 程序启动自动生成日志表，日志表的前缀可配置,规则："logs_"+环境，如dev环境=logs_dev
+    - 日志表按照周数分表，如logs_dev_36（dev环境第36周的日志表）
+  - 其他持久化方式
+    - 如SqlServer，MongoDB， Elasticsearch
+    - 尚未实现，可扩展
 </details> 
 
 ### 10.2、代码
@@ -685,6 +803,7 @@ public class ValuesController : BaseController
   //b.添加日志处理管道 
   app.UseLog(app.Environment);
   ```
+-  $\color{#dd0000} {AddLogStrategy方法和UseLog方法是自定义实现的，具体实现请参阅源代码}$
   
 * ##### 配置文件appsettings.json
   
@@ -746,7 +865,13 @@ public class ValuesController : BaseController
 ### 10.3、查询
 <details> 
     <summary>展开设计</summary>
-    
+
+  * #### 查询条件
+    - 查询条件的TimeStart和TimeEnd可以跨周，支持跨周查询日志
+    - 查询条件的Limit只能在0~50之间，超出无效
+    - 至需要查询属于某个请求的日志，请出入查询参数HttpRequestId
+    - 查询接口按照日志的写入时间倒序排序
+
 * #### 获取token
   
   ```javascript
@@ -769,7 +894,7 @@ public class ValuesController : BaseController
   }
   ```
 
-* #### 请求示例
+* #### 查询数据库日志
   
   ```
   POST http://localhost:7108/api/LogOperations/QueryDBLogs
@@ -792,9 +917,9 @@ public class ValuesController : BaseController
 | ------------- | ------ | -------- | ---- | --------------------------------------------------- | --------------------------------------------------------------------------------- |
 | HttpHost      | string | 模糊查询     | 否    | crm-web-api.smooretechtest.com                      | 主机地址                                                                              |
 | HttpPath      | string | 模糊查询     | 否    | api/XxxDemo/GetXxxs                                 | 请求路径                                                                              |
-| HttpRequestId | string | ==精确匹配== | 否    | d711873d3d9a423f8d009ba4c5c4b0d8 <br>(GUID去掉中间的“-”) | 请求唯一id                                                                            |
+| HttpRequestId | string | 精确匹配 | 否    | d711873d3d9a423f8d009ba4c5c4b0d8 <br>(GUID去掉中间的“-”) | 请求唯一id                                                                            |
 | SourceContext | string | 模糊查询     | 否    | Middlewares.SerilogMiddleware                       | 写日志的触发类的全名                                                                        |
-| Level         | int    | ==精确匹配== | 否    | 2                                                   | 日志级别，为空不过滤此条件, <br> 0=Verbose,1=Debug,2=Information,<br>3=Warning,4=Error,5=Fatal |
+| Level         | int    | 精确匹配 | 否    | 2                                                   | 日志级别，为空不过滤此条件, <br> 0=Verbose,1=Debug,2=Information,<br>3=Warning,4=Error,5=Fatal |
 | Message       | string | 模糊查询     | 否    | 日志内容                                                | 日志内容                                                                              |
 | TimeStart     | string | 比较大小     | 否    | 2023-08-16 17:01:01                                 | 日志写入的开始时间，为空不过滤此条件                                                                |
 | TimeEnd       | string | 比较大小     | 否    | 2023-08-16 17:09:01                                 | 日志写入的结束时间，为空时不过滤此条件                                                               |
@@ -839,12 +964,36 @@ public class ValuesController : BaseController
   
 </details> 
 
+### 10.4 html+JS查询数据库日志
+#### 10.4.1 功能说明
+- 任何人可在D365页面上查询某个接口的请求日志
+- 资源文件目录：/resource/log_query_d365/
+  - html/ShowLogs.html
+  - css/showlog.css
+  - css/bootstrap.min.css
+  - css/bootstrap-datetimepicker.min.css
+  - js/jquery-3.7.0.min.js
+  - js/GlobalUtil.js
+  - js/Tools.js
+  - js/CallCrmApi.js
+  - js/showlog.js
+  - js/bootstrap-datetimepicker.min.js
+
+
 ## 十一、部署
 
 <details> 
     <summary>展开设计</summary>
 
-### 10.1.IIS部署
+### 11.1 部署架构
+- window服务器简单部署
+    
+    A[公司] -->| 下 班 | B(菜市场)
+    B --> C{看见<br>卖西瓜的}
+    C -->|Yes| D[买一个包子]
+    C -->|No| E[买一斤包子]
+
+### 11.2 IIS部署
 - 根据实际情况更改ASPNETCORE_ENVIRONMENT的值，如：PRD表示生产环境，会自动去读appsettings.PRD.json配置文件的内容
 - web.config
   ```xml
@@ -875,7 +1024,7 @@ public class ValuesController : BaseController
     </location>
   </configuration>
   ```
-### 10.2.Windows Servers 部署
+### 11.3 Windows Servers 部署
 - 发布和IIS一样，但无需web.config文件，且需要在program.cs中支持kerstrel，kerstrel有如下实现方式
   - 编码方式 
     ```C#
@@ -908,8 +1057,10 @@ public class ValuesController : BaseController
     }
     ```
 - 设置windows服务开机启动
-### 10.3.Docker部署
-- 需要在program中支持kerstrel（同10.2.Windows Servers 部署）
+  
+### 11.4 Docker部署
+- 需要linux服务器
+- 需要在program.cs中支持kerstrel（同10.2.Windows Servers 部署）
 - 制作基础镜像（hub.pwc.cn/dotnet/aspnet:6.0, .net技术栈公用）
 - 添加docker file,继承基础镜像，将环境变量ASPNETCORE_ENVIRONMENT传入dot net run 命令行的environment参数，并推送至代码仓库。docker file 如下：
   

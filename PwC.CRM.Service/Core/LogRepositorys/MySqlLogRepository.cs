@@ -55,6 +55,10 @@ namespace PwC.CRM.Service.Core.LogRepositorys
             {
                 request.Limit = 50;
             }
+            if (request.Limit > 50)
+            {
+                request.Limit = 50;
+            }
             sqlStr += $" order by `Timestamp` desc limit {request.Limit} ";
 
             var res = await QueryListAsync<LoggerSimpleDO>(sqlStr);
