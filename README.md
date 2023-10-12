@@ -987,11 +987,9 @@ public class ValuesController : BaseController
 
 ### 11.1 部署架构
 - window服务器简单部署
-    
-    A[公司] -->| 下 班 | B(菜市场)
-    B --> C{看见<br>卖西瓜的}
-    C -->|Yes| D[买一个包子]
-    C -->|No| E[买一斤包子]
+- 微服务部署
+  
+![微服务部署架构图](resource/architecture/deploy_microservice.png)
 
 ### 11.2 IIS部署
 - 根据实际情况更改ASPNETCORE_ENVIRONMENT的值，如：PRD表示生产环境，会自动去读appsettings.PRD.json配置文件的内容
