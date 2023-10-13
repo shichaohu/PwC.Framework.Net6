@@ -15,41 +15,46 @@ namespace PwC.CRM.Service.Core.LogRepositorys
 
         public async Task<List<LoggerSimpleDO>> QueryLogsAsync(LogRequestDto request)
         {
-            string tableName = SerilogsLogUtil.GetPracticalTableName(request.TimeStart ?? DateTime.Now, LogTableName);
-            var sqlStr = @$" select ID,HttpHost, HttpRemoteAddress,HttpXForwardedFor,HttpPath, HttpRequestId, SourceContext, Timestamp, Level, Message, Exception
-                            from {tableName} where 1=1";
+            List<string> tableNames = SerilogsLogUtil.GetPracticalTableNameList(
+                request.TimeStart ?? DateTime.Now,
+                request.TimeEnd ?? DateTime.Now,
+                LogTableName
+                );
+
+            var sqlModel = @$" select ID,HttpHost, HttpRemoteAddress,HttpXForwardedFor,HttpPath, HttpRequestId, SourceContext, Timestamp, Level, Message, Exception
+                            from tableName_Placeholder where 1=1";
 
             if (!string.IsNullOrWhiteSpace(request.HttpRequestId))
             {
-                sqlStr += $" and HttpRequestId = '{request.HttpRequestId}' ";
+                sqlModel += $" and HttpRequestId = '{request.HttpRequestId}' ";
             }
             if (!string.IsNullOrWhiteSpace(request.HttpHost))
             {
-                sqlStr += $" and HttpHost like '%{request.HttpHost}%' ";
+                sqlModel += $" and HttpHost like '%{request.HttpHost}%' ";
             }
             if (!string.IsNullOrWhiteSpace(request.HttpPath))
             {
-                sqlStr += $" and HttpPath like '%{request.HttpPath}%' ";
+                sqlModel += $" and HttpPath like '%{request.HttpPath}%' ";
             }
             if (!string.IsNullOrWhiteSpace(request.Message))
             {
-                sqlStr += $" and Message like '%{request.Message}%' ";
+                sqlModel += $" and Message like '%{request.Message}%' ";
             }
             if (!string.IsNullOrWhiteSpace(request.SourceContext))
             {
-                sqlStr += $" and SourceContext like '%{request.SourceContext}%' ";
+                sqlModel += $" and SourceContext like '%{request.SourceContext}%' ";
             }
             if (request.Level.HasValue)
             {
-                sqlStr += $" and Level = '{request.Level.Value}' ";
+                sqlModel += $" and Level = '{request.Level.Value}' ";
             }
             if (request.TimeStart.HasValue)
             {
-                sqlStr += $" and `Timestamp` >= '{request.TimeStart}' ";
+                sqlModel += $" and `Timestamp` >= '{request.TimeStart}' ";
             }
             if (request.TimeEnd.HasValue)
             {
-                sqlStr += $" and `Timestamp` <= '{request.TimeEnd}' ";
+                sqlModel += $" and `Timestamp` <= '{request.TimeEnd}' ";
             }
             if (request.Limit <= 0)
             {
@@ -59,7 +64,18 @@ namespace PwC.CRM.Service.Core.LogRepositorys
             {
                 request.Limit = 50;
             }
-            sqlStr += $" order by `Timestamp` desc limit {request.Limit} ";
+            sqlModel += $" order by `Timestamp` desc limit {request.Limit} ";
+
+            string sqlStr = string.Empty;
+            int idx = 0;
+            foreach (var tableName in tableNames)
+            {
+                if (idx > 0)
+                {
+                    sqlStr += @$" union all ";
+                }
+                sqlStr += sqlModel.Replace("tableName_Placeholder", tableName);
+            }
 
             var res = await QueryListAsync<LoggerSimpleDO>(sqlStr);
             return res;
