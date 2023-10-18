@@ -67,7 +67,7 @@
 ### 使用场景
 - 场景一：基于.net 6.0框架开发WebApi
   - 此种场景需要注释掉下文中第四点（CRMClients）的功能
-- 场景而：D365与客户内部系统通过WebApi（代理角色）实现交互
+- 场景二：D365与客户内部系统通过WebApi（代理角色）实现交互
   - D365部署在外网，而客户内部系统只能内网访问 
   - 交互过程中存在复杂的逻辑
 ### 框架版本
@@ -99,7 +99,7 @@
     - 使用场景：内部系统访问
       - 减少系统设计复杂度
       - 但相当于明文传输账号和密码
-    -使用方式
+    - 使用方式
       - 调用接口时，在header 中传入参数
         ```C#
         Authorization:Basic+空格+base64密文
@@ -209,6 +209,7 @@ pwc_apiusers（pwc_name,pwc_clientid,pwc_clientsecret,pwc_scope,pwc_roles）
 - .net 6 默认上传文件大小限制是30M
 - IIS 默认上传文件大小限制是30M
 - 如果存在上传大于30M文件的接口，必须配置此功能
+- 配置后最大支持约2G
 ### 2.2 .net 6代码
 ```C#
 var builder = WebApplication.CreateBuilder(args);
@@ -268,13 +269,12 @@ Application Insights是微软基于Azure平台所提供的一个应用程序性�
   - ASP.NET、Java、Node.js、Python、ASP.NET Core
 - 功能
   - 收集描述应用程序活动与运行状况的指标
-  - 收集描述应用程序的遥测数据外，还可以使用 Application Insights 
-  - 收集和存储应用程序跟踪日志记录数据
-  - 实时指标：实时观察部署的应用程序的活动，而不影响主机环境。
-  - 可用性：也称为综合事务监视。 探测应用程序的外部终结点，以测试一段时间内的整体可用性和响应能力。
-  - GitHub 或 Azure DevOps 集成：在 Application Insights 数据上下文中创建 GitHub 或 Azure DevOps 工作项。
-  - 使用情况：了解哪些功能受用户欢迎，以及用户如何与应用程序交互和使用应用程序。
-  - 智能检测：通过主动遥测分析来自动检测故障和异常。
+    - 实时指标：实时观察部署的应用程序的活动，而不影响主机环境。
+  - 收集描述应用程序的遥测数据 
+    - 可用性：也称为综合事务监视。 探测应用程序的外部终结点，以测试一段时间内的整体可用性和响应能力。
+    - 使用情况：了解哪些功能受用户欢迎，以及用户如何与应用程序交互和使用应用程序。
+    - 智能检测：通过主动遥测分析来自动检测故障和异常。
+  - 收集并存储应用程序跟踪日志记录数据
 ### 3.2. 代码开启program.cs
 ```C#
 var builder = WebApplication.CreateBuilder(args);
@@ -495,7 +495,7 @@ public class DemoService : BaseService, IDemoService
 
           //查询单条记录
           var userxx = tranSvcClient.Retrieve("systemuser", user.systemuserid.Value, new ColumnSet(true));
-          var jsuser = userxx.ToModel<Systemuser>();
+          var user = userxx.ToModel<Systemuser>();
 
           //事务内创建
           tranSvcClient.CreateInTransaction(message);
@@ -601,8 +601,12 @@ public class DemoController : BaseController<DemoController>
 {
 }
 ```
-- ApiGroupNames 可以自定义
-  
+- ApiGroupNames 可以根据项目需求自定义
+
+### 8.4 功能截图
+![swagger](resource/image/swagger01.png)
+![swagger02](resource/image/swagger02.png)
+
 ## 九、自定义HttpClient（程序内发起http请求）
 
 <details> 
@@ -707,7 +711,22 @@ public class ValuesController : BaseController
 
     }
     ```
-  - SRDMHttpClient的实现代码
+  - c、AddCustomerHttpClient的实现代码
+  ```C#
+  public static void AddCustomerHttpClient(this IServiceCollection services, IConfiguration configuration)
+  {
+      services.AddHttpClient<SRDMHttpClient>(httpClient =>
+          {
+              httpClient.BaseAddress = new Uri(configuration["ExternalApiUrl:SRDM:Url"]);
+          })
+          .AddHttpMessageHandler(provider =>
+          {
+              return new LogHttpMessageHandler<SRDMHttpClient>(provider);
+          })
+          .SetHandlerLifetime(TimeSpan.FromMinutes(10));
+  }
+  ```
+  - d、SRDMHttpClient的实现代码
     ```C#
     /// <summary>
     /// SRDM的HttpClient
@@ -771,10 +790,10 @@ public class ValuesController : BaseController
 
   - 文件日志
     - 默认情况下将日志写入文件
-    - 文件名按天滚动，文件夹名称为日期加小时，
+    - 文件名按天滚动，文件夹名称为日期，
     - 单个文件最大10M，超过10M后另起一个新文件，如20230812.log,20230812_001.log
   - MySql日志
-    - 需要手动开启
+    - 需要手动开启，开启方式见10.2配置文件
     - 程序启动自动生成日志表，日志表的前缀可配置,规则："logs_"+环境，如dev环境=logs_dev
     - 日志表按照周数分表，如logs_dev_36（dev环境第36周的日志表）
   - 其他持久化方式
@@ -866,9 +885,11 @@ public class ValuesController : BaseController
 <details> 
     <summary>展开设计</summary>
 
+  - 目前查询只支持mysql
   * #### 查询条件
-    - 查询条件的TimeStart和TimeEnd可以跨周，支持跨周查询日志
-    - 查询条件的Limit只能在0~50之间，超出无效
+    - mysql
+      - 查询条件的TimeStart和TimeEnd可以跨周，支持跨周查询日志
+      - 查询条件的Limit只能在0~50之间，每周可查50条，超出无效
     - 至需要查询属于某个请求的日志，请出入查询参数HttpRequestId
     - 查询接口按照日志的写入时间倒序排序
 
@@ -978,7 +999,8 @@ public class ValuesController : BaseController
   - js/CallCrmApi.js
   - js/showlog.js
   - js/bootstrap-datetimepicker.min.js
-
+#### 10.4.2 截图
+![查询接口日志](resource/image/D365_querylog.png)
 
 ## 十一、部署
 
