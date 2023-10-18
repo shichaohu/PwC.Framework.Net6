@@ -43,6 +43,7 @@
       - [8.1 功能描述](#81-功能描述)
     - [8.2 代码开启program.cs](#82-代码开启programcs)
     - [8.3 接口分组](#83-接口分组)
+    - [8.4 功能截图](#84-功能截图)
   - [九、自定义HttpClient（程序内发起http请求）](#九自定义httpclient程序内发起http请求)
       - [9.1 功能描述](#91-功能描述)
     - [9.2 .net6中HttpClient的3种使用方式](#92-net6中httpclient的3种使用方式)
@@ -57,6 +58,7 @@
     - [10.3、查询](#103查询)
     - [10.4 html+JS查询数据库日志](#104-htmljs查询数据库日志)
       - [10.4.1 功能说明](#1041-功能说明)
+      - [10.4.2 截图](#1042-截图)
   - [十一、部署](#十一部署)
     - [11.1 部署架构](#111-部署架构)
     - [11.2 IIS部署](#112-iis部署)
@@ -604,8 +606,10 @@ public class DemoController : BaseController<DemoController>
 - ApiGroupNames 可以根据项目需求自定义
 
 ### 8.4 功能截图
+
 ![swagger](resource/image/swagger01.png)
 ![swagger02](resource/image/swagger02.png)
+
 
 ## 九、自定义HttpClient（程序内发起http请求）
 
@@ -999,7 +1003,9 @@ public class ValuesController : BaseController
   - js/CallCrmApi.js
   - js/showlog.js
   - js/bootstrap-datetimepicker.min.js
+
 #### 10.4.2 截图
+
 ![查询接口日志](resource/image/D365_querylog.png)
 
 ## 十一、部署
