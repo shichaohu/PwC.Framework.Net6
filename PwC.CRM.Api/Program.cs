@@ -41,8 +41,6 @@ builder.Services.AddControllers(option =>
 
 builder.Services.AddCRMClients(builder.Configuration);
 builder.Services.AddAutoDependency("PwC.CRM.Service");
-builder.Services.AddSingleton<LocalCachelper>();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddMemoryCache();
 builder.Services.AddModelStateVrify();
