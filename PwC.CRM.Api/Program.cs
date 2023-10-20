@@ -1,15 +1,14 @@
-using Azure.Storage.Blobs;
 using Microsoft.ApplicationInsights.Extensibility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using PwC.CRM.Api.HttpClients;
+using PwC.CRM.Api.Swagger;
 using PwC.CRM.Share.Authentication;
 using PwC.CRM.Share.Extensions;
 using PwC.CRM.Share.Handlers;
 using PwC.CRM.Share.Log.Serilogs;
 using PwC.CRM.Share.Util;
-using PwC.CRM.Api.HttpClients;
-using PwC.CRM.Api.Swagger;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +42,7 @@ builder.Services.AddCRMClients(builder.Configuration);
 builder.Services.AddAutoDependency("PwC.CRM.Service");
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<LocalCache>();
 builder.Services.AddModelStateVrify();
 
 builder.Services.AddCors(policy =>

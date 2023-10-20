@@ -5,11 +5,11 @@ namespace PwC.CRM.Share.Util
     /// <summary>
     /// 本地缓存帮助类
     /// </summary>
-    public class LocalCachelper
+    public class LocalCache
     {
         //本地内存缓存
         private IMemoryCache _meoryCache;
-        public LocalCachelper(IMemoryCache memoryCache)
+        public LocalCache(IMemoryCache memoryCache)
         {
             _meoryCache = memoryCache;
         }

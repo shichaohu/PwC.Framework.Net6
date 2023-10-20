@@ -12,10 +12,10 @@ namespace PwC.CRM.Service.Core.Implement
     public class LoginService : BaseService, ILoginService
     {
         private readonly ILogger<LoginService> _logger;
-        private readonly LocalCachelper _cache;
+        private readonly LocalCache _cache;
         private string _loginUsersCacheKey = "APV.CRM.Service.LoginUsers";
 
-        public LoginService(ILogger<LoginService> logger, LocalCachelper cache, ICommonInjectionObject commonInjectionObject)
+        public LoginService(ILogger<LoginService> logger, LocalCache cache, ICommonInjectionObject commonInjectionObject)
             : base(commonInjectionObject)
         {
             string targetCRMService = commonInjectionObject.HttpContextAccessor.HttpContext.Request.Headers["Target-CRM-Service"];
