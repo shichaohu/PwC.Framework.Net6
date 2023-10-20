@@ -4,6 +4,8 @@ using PwC.CRM.Service.Dto.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PwC.CRM.Share.BaseModel;
+using PwC.CRM.Share.Log.Serilogs.Models;
 
 namespace PwC.CRM.Api.Controllers
 {
@@ -30,26 +32,23 @@ namespace PwC.CRM.Api.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetToken")]
-        public async Task<IActionResult> GetToken(LoginRequestDto request)
+        public async Task<CommonResponseDto<LoginResponseDto>> GetToken(LoginRequestDto request)
         {
+            var result = new CommonResponseDto<LoginResponseDto>
+            {
+                Code = ResponseCodeEnum.Success
+            };
             var ret = await _loginService.Login(request);
 
             if (ret == null)
             {
-                _logger.LogInformation($"登录密码错误:{JsonConvert.SerializeObject(request)}");
-                var erroRes = new
-                {
-                    error = "unauthorized_client",
-                    error_description = "userid check error",
-                    error_codes = new List<int>() { 700016 },
-                    timestamp = DateTime.Now.ToString(),
-                    trace_id = Guid.NewGuid(),
-                    correlation_id = Guid.NewGuid(),
-                    error_uri = ""
-                };
-                return BadRequest(erroRes);
+                result.Code = ResponseCodeEnum.ParameterError;
+                result.Message = "unauthorized client,incorrect input parameter";
+                _logger.LogInformation($"unauthorized client,incorrect input parameter:{JsonConvert.SerializeObject(request)}");
+                
             }
-            return Ok(ret);
+            result.Data = ret;
+            return result;
         }
         /// <summary>
         /// 清空登录用户Token
