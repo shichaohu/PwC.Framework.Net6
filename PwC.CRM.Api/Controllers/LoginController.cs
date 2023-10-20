@@ -45,9 +45,11 @@ namespace PwC.CRM.Api.Controllers
                 result.Code = ResponseCodeEnum.ParameterError;
                 result.Message = "unauthorized client,incorrect input parameter";
                 _logger.LogInformation($"unauthorized client,incorrect input parameter:{JsonConvert.SerializeObject(request)}");
-                
+
             }
-            result.Data = ret;
+            else
+                result.Data = ret;
+
             return result;
         }
         /// <summary>
