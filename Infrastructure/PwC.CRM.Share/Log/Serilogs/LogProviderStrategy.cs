@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
-
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace PwC.CRM.Share.Log.Serilogs
 {
@@ -29,7 +29,9 @@ namespace PwC.CRM.Share.Log.Serilogs
         /// <param name="configuration"></param>
         public static void AddLogStrategy(this IHostBuilder hostBuilder, ILoggingBuilder loggingBuilder, IServiceCollection service, IConfiguration configuration)
         {
-            service.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            service.Configure<KestrelServerOptions>(x => x.AllowSynchronousIO = true)
+                    .Configure<IISServerOptions>(x => x.AllowSynchronousIO = true);
+
             loggingBuilder.ClearProviders();
             hostBuilder.UseSerilog((context, serviceProvider, logger) =>
             {
