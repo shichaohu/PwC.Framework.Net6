@@ -1,4 +1,5 @@
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.AspNetCore.Rewrite;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -9,11 +10,11 @@ using PwC.CRM.Share.Extensions;
 using PwC.CRM.Share.Handlers;
 using PwC.CRM.Share.Log.Serilogs;
 using PwC.CRM.Share.Util;
+using PwC.CRM.Share.XxlJob;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(builder.Configuration);
-
 builder.Services.UseFileUpload(builder.WebHost);
 
 //enables Application Insights telemetry collection.
@@ -56,20 +57,20 @@ builder.Services.AddCors(policy =>
 
 builder.Services.AddSwaggerDoc(builder.Configuration);
 builder.Services.AddCustomerHttpClient(builder.Configuration);
-
 builder.Host.AddLogStrategy(builder.Logging, builder.Services, builder.Configuration);
+builder.Services.AddXxlJob(builder.Configuration);
 
 
 var app = builder.Build();
+
 app.UseLog(app.Environment);
+app.UseXxlJobExecutor();
 app.UseCors("CorsPolicy");
 app.UseSwaggerUi(builder.Configuration, app.Environment);
-
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseHttpsRedirection();
-
 app.MapControllers();
 app.Logger.Log(LogLevel.Information, $"App Environment:{JsonConvert.SerializeObject(app.Environment)}");
 

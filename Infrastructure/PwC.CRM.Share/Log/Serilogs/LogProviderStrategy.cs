@@ -91,18 +91,18 @@ namespace PwC.CRM.Share.Log.Serilogs
 
         private static void WriteLogToFile(HostBuilderContext context, LoggerConfiguration loggerConfiguration, IConfiguration configuration)
         {
-            string outputTemp = @"{NewLine}{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] Url:{HttpHost}{HttpPath}
-    RequestId:{HttpRequestId}
-    RemoteAddress:{HttpRemoteAddress}
-    X-Forwarded-For:{HttpXForwardedFor}
-    SourceContext:{SourceContext}
-    {Message:lj}
-    {Exception}";
+            string outputTemp = @"{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] Url:{HttpHost}{HttpPath}
+RequestId:{HttpRequestId}
+RemoteAddress:{HttpRemoteAddress}
+X-Forwarded-For:{HttpXForwardedFor}
+SourceContext:{SourceContext}
+{Message:lj}
+{Exception}{NewLine}";
             loggerConfiguration
                 .WriteTo.Logger(configure => configure
                     .Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Error)
                     .WriteTo.File(
-                        $"log/error/.log",
+                        $"logs/error/.log",
                         rollingInterval: RollingInterval.Day,
                         rollOnFileSizeLimit: true,
                         fileSizeLimitBytes: 10_000_000,
@@ -112,7 +112,7 @@ namespace PwC.CRM.Share.Log.Serilogs
 
                 .WriteTo.Logger(configure => configure
                     .WriteTo.File(
-                    $"log/.log",//如20230812.log,20230812_001.log
+                    $"logs/.log",//如20230812.log,20230812_001.log
                     rollingInterval: RollingInterval.Day,// 设置日志输出到文件中，文件名按天滚动，文件夹名称为日期加小时
                     rollOnFileSizeLimit: true,// 设置为 true，表示启用日志文件大小限制，当日志文件达到设定的大小后，会自动滚动到新的文件中。
                     fileSizeLimitBytes: 10_000_000, //设置每个日志文件的最大大小，单位是字节。这里的值是 10MB，即 10_000_000 字节。
