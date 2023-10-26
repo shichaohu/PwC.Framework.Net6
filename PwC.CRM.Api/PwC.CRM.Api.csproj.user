@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Controller_SelectedScaffolderID>ApiControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Common/Api</Controller_SelectedScaffolderCategoryPath>
-    <ActiveDebugProfile>SMoore.APV.Service.Api.Dev</ActiveDebugProfile>
+    <ActiveDebugProfile>PwC.CRM.Api.Prd</ActiveDebugProfile>
     <NameOfLastUsedPublishProfile>C:\project\company\APV\apv.crm.services\APV.CRM.Service.Api\Properties\PublishProfiles\FolderProfile.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

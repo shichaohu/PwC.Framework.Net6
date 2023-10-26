@@ -72,6 +72,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.Logger.Log(LogLevel.Information, $"App Environment:{JsonConvert.SerializeObject(app.Environment)}");
+app.Logger.Log(LogLevel.Information, $"Application started in the environment:{JsonConvert.SerializeObject(app.Environment)}");
 
 app.Run();

@@ -45,7 +45,7 @@
         "ASPNETCORE_ENVIRONMENT": "UAT"
       }
     },
-    "PwC.CRM.Api.Pro": {
+    "PwC.CRM.Api.Prd": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

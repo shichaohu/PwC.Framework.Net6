@@ -53,8 +53,9 @@
   - [十、系统日志](#十系统日志)
     - [10.1功能描述](#101功能描述)
     - [10.2、代码](#102代码)
-      - [a、开启代码](#a开启代码)
-      - [b、代码使用](#b代码使用)
+      - [a、数据库脚本](#a数据库脚本)
+      - [b、开启代码](#b开启代码)
+      - [c、代码使用](#c代码使用)
     - [10.3、查询](#103查询)
     - [10.4 html+JS查询数据库日志](#104-htmljs查询数据库日志)
       - [10.4.1 功能说明](#1041-功能说明)
@@ -809,7 +810,12 @@ public class ValuesController : BaseController
 <details> 
     <summary>展开设计</summary>
 
-#### a、开启代码
+#### a、数据库脚本
+```sql
+-- mysql
+create database if not exists `pwc_crm_logs` default character set utf8mb4 collate utf8mb4_unicode_ci;
+```
+#### b、开启代码
 
 * ##### program.cs
   
@@ -841,7 +847,7 @@ public class ValuesController : BaseController
   }
   ```
 
-#### b、代码使用
+#### c、代码使用
 
 * 控制器使用
   
