@@ -110,7 +110,7 @@ xxl.job.logretentiondays=30
   {
     "xxlJob": {
         "adminAddresses": "http://localhost:8080/xxl-job-admin",//调度中心
-        "appName": "xxl-job-executor-dotnet",//.net6执行器名称
+        "appName": "xxl-job-executor-dotnet-PwCCRM",//.net6执行器名称
         "specialBindAddress": "http://localhost",//.net6执行器部署后的ip
         "port": 7018,//.net6执行器部署后的端口
         "autoRegistry": true,

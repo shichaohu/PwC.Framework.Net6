@@ -40,10 +40,9 @@ namespace PwC.CRM.Share.XxlJob
                     switch (requestPath)
                     {
                         case "beat":
-                            context.Response.StatusCode = 200;
-                            return;
                         case "idleBeat":
                         case "kill":
+                            context.Response.StatusCode = 200;
                             return;
                         case "log":
                             var logRes = ReturnT.Success("");
