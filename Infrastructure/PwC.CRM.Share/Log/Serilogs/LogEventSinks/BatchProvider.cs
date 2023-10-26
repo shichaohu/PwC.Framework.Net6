@@ -61,7 +61,6 @@ namespace PwC.CRM.Share.Log.Serilogs.LogEventSinks
 
         private async Task PumpAsync()
         {
-            _ = 1;
             try
             {
                 while (!_batchEventsCollection.IsCompleted)

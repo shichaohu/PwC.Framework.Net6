@@ -42,43 +42,21 @@ namespace PwC.CRM.Api.Controllers
             };
             try
             {
-                string path = Directory.GetCurrentDirectory() + "\\log";
+                string path = Directory.GetCurrentDirectory() + "\\logs";
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
                 }
                 var file = Directory.GetFiles(path).ToList();
-                if (request.logfilename != null && request.logfilename.Count > 0)
+                if (request.LogfileNamePrefix != null && request.LogfileNamePrefix.Count > 0)
                 {
-                    file = file.Where(w => request.logfilename.Any(c => w.EndsWith(c))).ToList();
+                    file = file.Where(w => request.LogfileNamePrefix.Any(c => w.StartsWith(c))).ToList();
                 }
 
                 file.ForEach(v =>
                 {
-                    var allLine = System.IO.File.ReadAllLines(v);
-                    for (int i = 0; i < allLine.Length; i++)
-                    {
-
-                        if (request.relationship == "or" && retObjcet.Data.Count < 3000)
-                        {
-                            if (request.search.Any(w => allLine[i].Contains(w)))
-                            {
-                                retObjcet.Data.Add(allLine[i]);
-
-                            }
-                        }
-
-                        else if (request.relationship == "and" && retObjcet.Data.Count < 3000)
-                        {
-                            if (request.search.All(w => allLine[i].Contains(w)))
-                            {
-                                retObjcet.Data.Add(allLine[i]);
-
-                            }
-                        }
-
-
-                    }
+                    var allLine = System.IO.File.ReadAllLines(v).ToList(); 
+                    retObjcet.Data.AddRange(allLine);                    
                 });
             }
             catch (Exception e)
@@ -118,8 +96,9 @@ namespace PwC.CRM.Api.Controllers
 
     public class SearchLogsModel
     {
-        public List<string> search { get; set; }
-        public List<string>? logfilename { get; set; }
-        public string? relationship { get; set; } = "or";
+        /// <summary>
+        /// 日志文件名称前缀
+        /// </summary>
+        public List<string>? LogfileNamePrefix { get; set; }
     }
 }
