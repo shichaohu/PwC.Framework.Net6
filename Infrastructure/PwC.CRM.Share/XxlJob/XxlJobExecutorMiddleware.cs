@@ -5,10 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.Ocsp;
 using PwC.CRM.Share.Util;
-using System.Drawing.Text;
-using System.ServiceModel.Channels;
 using System.Text;
 
 namespace PwC.CRM.Share.XxlJob
@@ -50,7 +47,7 @@ namespace PwC.CRM.Share.XxlJob
                             return;
                         case "log":
                             var logRes = ReturnT.Success("");
-                            logRes.Content = new LogResult(1, 2, "查询job执行日志，请使用接口：/api/LogOperations/QueryFileLogs", true);
+                            logRes.Content = new LogResult(1, 2, "查询job执行日志，请使用接口：/api/LogOperations/QueryDBLogs", true);
                             await context.Response.WriteAsync(JsonConvert.SerializeObject(logRes));
                             context.Response.StatusCode = 200;
                             return;
@@ -88,14 +85,7 @@ namespace PwC.CRM.Share.XxlJob
 
                                     context.Request.Body = ms;
                                     context.Request.Body.Seek(0, SeekOrigin.Begin);
-
                                     context.Request.Path = executorParams.Path;
-                                    string[] route = executorParams.Path.ToLower().TrimStart('/').Replace("api/", "").Split("/");
-                                    if (route.Length == 2)
-                                    {
-                                        context.Request.RouteValues["controller"] = route[0];
-                                        context.Request.RouteValues["action"] = route[1];
-                                    }
 
                                     _logger.LogInformation($@"XxlJobExecutor begin run path:{executorParams.Path}{Environment.NewLine}Request.Body:{actuallyParam}");
                                 }
@@ -112,29 +102,8 @@ namespace PwC.CRM.Share.XxlJob
                         }
                         finally
                         {
-                            string[]? allowIps = _configuration["xxlJob:allowIp"]?.ToString().Split(',');
-                            var remoteIpAddressList = new List<string>();
-                            var remoteIpAddress = context.Connection.RemoteIpAddress?.ToString();
-                            if (!string.IsNullOrWhiteSpace(remoteIpAddress)) remoteIpAddressList.Add(remoteIpAddress);
-                            string[]? arryXForwardedFor = context.Request.Headers["X-Forwarded-For"].FirstOrDefault()?.Split(',');
-                            if (arryXForwardedFor?.Length > 0)
-                            {
-                                remoteIpAddressList.AddRange(arryXForwardedFor);
-                            }
-                            remoteIpAddressList = remoteIpAddressList.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-                            bool isIpAllow = allowIps != null && (allowIps.Contains("*")
-                                || allowIps.Any(x =>
-                                    remoteIpAddressList.Any(y => x.Contains(y.Trim()))
-                                    || remoteIpAddressList.Any(y => y.Contains(x.Trim()))
-                                    )
-                                );
-
-                            if (isIpAllow)
-                            {
-                                string authorization = StringHelper.StringToBase64($"{_configuration["Jwt:Basic:Account"]}:{_configuration["Jwt:Basic:Password"]}");
-                                context.Request.Headers.Authorization = $"Basic {authorization}";
-                            }
-
+                            string authorization = StringHelper.StringToBase64($"{_configuration["Jwt:Basic:Account"]}:{_configuration["Jwt:Basic:Password"]}");
+                            context.Request.Headers.Authorization = $"Basic {authorization}";
                         }
 
                     }

@@ -1,12 +1,6 @@
-﻿using PwC.CRM.Share.Log.Serilogs.Extentions;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PwC.CRM.Share.Log.Serilogs.Middlewares
 {

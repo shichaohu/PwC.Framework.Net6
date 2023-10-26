@@ -1,22 +1,10 @@
 ﻿using DotXxlJob.Core;
 using DotXxlJob.Core.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
-using MySqlX.XDevAPI;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Reflection.PortableExecutable;
-using System.Security.Policy;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace PwC.CRM.Share.XxlJob.JobHandlers
 {
