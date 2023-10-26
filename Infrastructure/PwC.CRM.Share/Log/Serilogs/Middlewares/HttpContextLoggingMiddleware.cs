@@ -70,7 +70,7 @@ namespace PwC.CRM.Share.Log.Serilogs.Middlewares
 
                     if (context.Response.Body.Length <= 1024 * 200)//200kb
                     {
-                        string space = "\n    ";
+                        string space = "\n";
                         responseContent = responseContent.Replace(",", $",{space}").Replace("{", "{" + space).Replace("}", space + "}");
                         _logger.LogInformation(@$"Response.Body：{responseContent}");
                     }

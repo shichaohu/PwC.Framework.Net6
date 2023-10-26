@@ -129,5 +129,24 @@ namespace PwC.CRM.Share.Util
             var value = 0;
             return int.TryParse(str, out value) ? value : defaultValue;
         }
+        /// <summary>
+        /// String 转Base64 string
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string StringToBase64(string str)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(str);
+            return Convert.ToBase64String(bytes);
+        }
+        /// <summary>
+        /// Base64 string 转 string
+        /// </summary>
+        /// <param name="base64String"></param>
+        /// <returns></returns>
+        public static string Base64ToString(string base64String)
+        {
+            return Encoding.UTF8.GetString(Convert.FromBase64String(base64String));
+        }
     }
 }

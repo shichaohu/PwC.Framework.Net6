@@ -5,13 +5,9 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PwC.CRM.Api", "PwC.CRM.Api\PwC.CRM.Api.csproj", "{49F3BBDB-484C-4401-B13D-018C2B719752}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Jobs", "Jobs", "{5F76D886-7844-443B-9FD7-A13D77B8C8E1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PwC.CRM.Service", "PwC.CRM.Service\PwC.CRM.Service.csproj", "{6983415A-011E-4EE1-8573-5B7D9FA169E3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PwC.CRM.Share", "Infrastructure\PwC.Crm.Share\PwC.CRM.Share.csproj", "{AACBD2DE-01B3-40E2-A2DE-ACBDDD840127}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PwC.CRM.Job.BaseData.UpdateCustomerBalanceReceivable", "Jobs\PwC.CRM.Job.BaseData.UpdateCustomerBalanceReceivable\PwC.CRM.Job.BaseData.UpdateCustomerBalanceReceivable.csproj", "{8779DF2A-ACEB-47EB-8AD0-FB5392E764F5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PwC.CRM.Models", "Infrastructure\PwC.Crm.Models\PwC.CRM.Models.csproj", "{ED5BDCE7-7C4B-483B-9358-A06479DC87E7}"
 EndProject
@@ -35,10 +31,6 @@ Global
 		{AACBD2DE-01B3-40E2-A2DE-ACBDDD840127}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AACBD2DE-01B3-40E2-A2DE-ACBDDD840127}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AACBD2DE-01B3-40E2-A2DE-ACBDDD840127}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8779DF2A-ACEB-47EB-8AD0-FB5392E764F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8779DF2A-ACEB-47EB-8AD0-FB5392E764F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8779DF2A-ACEB-47EB-8AD0-FB5392E764F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8779DF2A-ACEB-47EB-8AD0-FB5392E764F5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ED5BDCE7-7C4B-483B-9358-A06479DC87E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ED5BDCE7-7C4B-483B-9358-A06479DC87E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED5BDCE7-7C4B-483B-9358-A06479DC87E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -49,7 +41,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{AACBD2DE-01B3-40E2-A2DE-ACBDDD840127} = {20BC059A-CA64-479A-8EAC-21F40C5D991F}
-		{8779DF2A-ACEB-47EB-8AD0-FB5392E764F5} = {5F76D886-7844-443B-9FD7-A13D77B8C8E1}
 		{ED5BDCE7-7C4B-483B-9358-A06479DC87E7} = {20BC059A-CA64-479A-8EAC-21F40C5D991F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
