@@ -122,48 +122,62 @@ namespace PwC.CRM.Share.Log.Serilogs.LogEventSinks
         {
             try
             {
-                using MySqlConnection sqlCon = GetSqlConnection();
-                using MySqlTransaction tr = await sqlCon.BeginTransactionAsync().ConfigureAwait(continueOnCapturedContext: false);
-                MySqlCommand insertCommand = GetInsertCommand(sqlCon);
-                insertCommand.Transaction = tr;
-
-                foreach (LogEvent item in logEventsBatch)
-                {
-                    string GetItemPropertiesString(string name)
-                    {
-                        string propString = item.Properties[name]?.ToString()?.TrimStart('"')?.TrimEnd('"');
-                        return propString;
-                    };
-                    StringWriter stringWriter = new StringWriter(new StringBuilder());
-                    item.RenderMessage(stringWriter);
-
-                    #region 自定义属性 @host,@httpRequestId,@sourceContext
-                    insertCommand.Parameters["@httpHost"].Value = GetItemPropertiesString("HttpHost");
-                    insertCommand.Parameters["@httpRemoteAddress"].Value = GetItemPropertiesString("HttpRemoteAddress");
-                    insertCommand.Parameters["@httpXForwardedFor"].Value = GetItemPropertiesString("HttpXForwardedFor");
-                    insertCommand.Parameters["@httpPath"].Value = GetItemPropertiesString("HttpPath");
-                    insertCommand.Parameters["@httpRequestId"].Value = GetItemPropertiesString("HttpRequestId");
-                    insertCommand.Parameters["@sourceContext"].Value = GetItemPropertiesString("SourceContext");
-                    #endregion
-
-                    insertCommand.Parameters["@ts"].Value = (_storeTimestampInUtc ? item.Timestamp.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss.fffzzz") : item.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fffzzz"));
-                    insertCommand.Parameters["@level"].Value = item.Level.ToString();
-                    insertCommand.Parameters["@template"].Value = item.MessageTemplate.ToString();
-                    insertCommand.Parameters["@msg"].Value = stringWriter;
-                    insertCommand.Parameters["@ex"].Value = item.Exception?.ToString();
-                    insertCommand.Parameters["@prop"].Value = ((item.Properties.Count > 0) ? JsonConvert.SerializeObject(item.Properties) : string.Empty);
-                    int count = await insertCommand.ExecuteNonQueryAsync().ConfigureAwait(continueOnCapturedContext: false);
-
-                }
-
-                tr.Commit();
-                return true;
+                return await WriteLogAsync(logEventsBatch);
             }
-            catch (Exception ex)
+            catch
             {
-                SelfLog.WriteLine(ex.Message);
-                return false;
+                try
+                {
+                    MySqlConnection sqlConnection = GetSqlConnection();
+                    CreateTable(sqlConnection, _tableName);
+                    return await WriteLogAsync(logEventsBatch);
+                }
+                catch (Exception ex)
+                {
+                    SelfLog.WriteLine(ex.Message);
+                    return false;
+                }
             }
+        }
+
+        private async Task<bool> WriteLogAsync(ICollection<LogEvent> logEventsBatch)
+        {
+            using MySqlConnection sqlCon = GetSqlConnection();
+            using MySqlTransaction tr = await sqlCon.BeginTransactionAsync().ConfigureAwait(continueOnCapturedContext: false);
+            MySqlCommand insertCommand = GetInsertCommand(sqlCon);
+            insertCommand.Transaction = tr;
+
+            foreach (LogEvent item in logEventsBatch)
+            {
+                string GetItemPropertiesString(string name)
+                {
+                    string propString = item.Properties[name]?.ToString()?.TrimStart('"')?.TrimEnd('"');
+                    return propString;
+                };
+                StringWriter stringWriter = new StringWriter(new StringBuilder());
+                item.RenderMessage(stringWriter);
+
+                #region 自定义属性 @host,@httpRequestId,@sourceContext
+                insertCommand.Parameters["@httpHost"].Value = GetItemPropertiesString("HttpHost");
+                insertCommand.Parameters["@httpRemoteAddress"].Value = GetItemPropertiesString("HttpRemoteAddress");
+                insertCommand.Parameters["@httpXForwardedFor"].Value = GetItemPropertiesString("HttpXForwardedFor");
+                insertCommand.Parameters["@httpPath"].Value = GetItemPropertiesString("HttpPath");
+                insertCommand.Parameters["@httpRequestId"].Value = GetItemPropertiesString("HttpRequestId");
+                insertCommand.Parameters["@sourceContext"].Value = GetItemPropertiesString("SourceContext");
+                #endregion
+
+                insertCommand.Parameters["@ts"].Value = (_storeTimestampInUtc ? item.Timestamp.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss.fffzzz") : item.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fffzzz"));
+                insertCommand.Parameters["@level"].Value = item.Level.ToString();
+                insertCommand.Parameters["@template"].Value = item.MessageTemplate.ToString();
+                insertCommand.Parameters["@msg"].Value = stringWriter;
+                insertCommand.Parameters["@ex"].Value = item.Exception?.ToString();
+                insertCommand.Parameters["@prop"].Value = ((item.Properties.Count > 0) ? JsonConvert.SerializeObject(item.Properties) : string.Empty);
+                int count = await insertCommand.ExecuteNonQueryAsync().ConfigureAwait(continueOnCapturedContext: false);
+
+            }
+
+            tr.Commit();
+            return true;
         }
     }
 }
