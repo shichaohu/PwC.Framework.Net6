@@ -1,15 +1,37 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using PwC.CRM.Share.BaseModel;
 using PwC.CRM.Share.CommonCode;
+using PwC.CRM.Share.Util;
 using System.Reflection;
 
 namespace PwC.CRM.Share.Extensions;
 
 public static class AspDotNetExtensions
 {
+    /// <summary>
+    /// Adds Asp.Net base services to the specified IServiceCollection
+    /// </summary>
+    /// <param name="services"></param>
+    public static void AddAspDotNetBasic(this IServiceCollection services)
+    {
+        services.AddEndpointsApiExplorer();
+        services.AddMemoryCache();
+        services.AddSingleton<LocalCache>();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+        services.AddCors(policy =>
+        {
+            policy.AddPolicy("CorsPolicy", opt => opt
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+            //.WithExposedHeaders("X-Pagination"));
+        });
+    }
 
     /// <summary>
     /// 自动注入projectName中实现IDependency的接口

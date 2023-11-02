@@ -64,7 +64,6 @@ namespace PwC.CRM.Service.Core.LogRepositorys
             {
                 request.Limit = 50;
             }
-            sqlModel += $" order by `Timestamp` desc limit {request.Limit} ";
 
             string sqlStr = string.Empty;
             int idx = 0;
@@ -75,7 +74,9 @@ namespace PwC.CRM.Service.Core.LogRepositorys
                     sqlStr += @$" union all ";
                 }
                 sqlStr += sqlModel.Replace("tableName_Placeholder", tableName);
+                idx++;
             }
+            sqlStr += $" order by `Timestamp` desc limit {request.Limit} ";
 
             var res = await QueryListAsync<LoggerSimpleDO>(sqlStr);
             return res;
