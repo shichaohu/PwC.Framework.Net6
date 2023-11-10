@@ -1,4 +1,4 @@
-﻿using PwC.CRM.Api.Extensions.HttpClientHandlers;
+﻿using PwC.CRM.Share.HttpClientHandlers;
 using NPOI.SS.Formula.Functions;
 using PwC.CRM.Share.BaseModel;
 

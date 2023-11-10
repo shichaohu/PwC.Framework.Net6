@@ -1,6 +1,6 @@
 ﻿using PwC.CRM.Share.BaseModel;
 
-namespace PwC.CRM.Api.Extensions.HttpClientHandlers
+namespace PwC.CRM.Share.HttpClientHandlers
 {
     public interface IHttpClient
     {

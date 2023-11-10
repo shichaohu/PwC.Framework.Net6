@@ -1,5 +1,5 @@
-﻿using PwC.CRM.Api.Extensions.HttpClientHandlers;
-using PwC.CRM.Api.HttpClients.HttpClientHandlers;
+﻿using PwC.CRM.Api.HttpClients.HttpClientHandlers;
+using PwC.CRM.Share.HttpClientHandlers;
 using System.Runtime.CompilerServices;
 using System.Text;
 

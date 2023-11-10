@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using PwC.CRM.Share.BaseModel;
 using System.Text;
 
-namespace PwC.CRM.Api.Extensions.HttpClientHandlers
+namespace PwC.CRM.Share.HttpClientHandlers
 {
     public class BaseHttpClient : IHttpClient
     {

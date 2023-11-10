@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace PwC.CRM.Api.Extensions.HttpClientHandlers
+namespace PwC.CRM.Share.HttpClientHandlers
 {
     /// <summary>
     /// 请求的日志处理
